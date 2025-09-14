@@ -2,11 +2,12 @@
 
 A sophisticated AI tool that implements a complete professional software development workflow:
 - **Senior Developers (Gemini/Qwen)**: Create architecture, specifications, and conduct code reviews
-- **Implementation Team (Ollama Models)**: Implement solutions using specialized models for each task type
+- **Implementation Team (Multiple AI Options)**: Implement solutions using specialized models for each task type
 - **Testing Framework (Sprite MCP)**: Automatically test code quality and functionality
 - **Continuous Improvement**: Iterative refinement based on professional feedback
 - **Motivational Guidance**: Inspirational messages about technology freedom throughout the process
 - **Interactive API Setup**: Guided setup for remote AI services
+- **Image Processing**: Analyze UI designs and documentation images
 
 This approach mimics a complete professional software development process with specialized roles, automated testing, inspirational guidance, and easy API configuration.
 
@@ -18,15 +19,17 @@ Users can choose between:
 
 - **Professional Development Workflow**: Architecture → Implementation → Testing → Review → Improvement
 - **Role-Based AI Processing**: Specialized AI for each development role
-- **Dynamic Model Selection**: Chooses optimal local models based on task type
+- **Dynamic Model Selection**: Chooses optimal models based on task type and hardware
 - **Automated Testing**: Integration with Sprite MCP testing framework
 - **Privacy First**: Sensitive data stays local during implementation
-- **Resource Efficient**: Works on limited hardware
-- **Multi-Model Support**: Gemini, Qwen, and Ollama integration
+- **Resource Efficient**: Works on limited hardware with multiple processing options
+- **Multi-Model Support**: Gemini, Qwen, Ollama, and OpenRouter integration
 - **Motivational Guidance**: Inspirational messages about technology freedom
 - **Interactive API Setup**: Guided configuration for remote services
 - **Task Orchestration**: Complex tasks broken down into manageable steps
 - **Dual Interface**: Both CLI and GUI options available
+- **Image Processing**: Analyze UI designs and documentation with vision models
+- **Cross-Platform**: Works on Windows, Mac, and Linux
 
 ## The Professional Senior Developer Workflow
 
@@ -38,9 +41,9 @@ When you use the hybrid mode for complex tasks, the tool follows this complete p
    - Defines best practices and design patterns
 
 2. **⌨️ Implementation Phase**: 
-   - Professional developers (local AI) implement solutions
+   - Professional developers (local/cloud AI) implement solutions
    - Uses specialized models based on task type
-   - Maintains privacy and efficiency locally
+   - Maintains privacy and efficiency locally or leverages cloud when needed
 
 3. **🧪 Automated Testing**: 
    - Runs comprehensive tests using Sprite MCP framework
@@ -82,19 +85,33 @@ Setting up API keys for remote AI services is now easier than ever with our inte
 hybrid-ai --setup
 ```
 
-This command will guide you through:
+This command will guide you through hardware-specific setup:
 
-1. **Gemini API Setup**:
+1. **Hardware Detection**:
+   - Identifies if you have a GPU or not
+   - Recommends appropriate AI services based on your hardware
+
+2. **Service Configuration**:
+   - Option to use local models (Ollama) for GPU users
+   - Option to use OpenRouter cloud API for users without GPU
+   - Option to use Senior Developer services (Gemini/Qwen) for complex tasks
+
+3. **Gemini API Setup**:
    - Option to open https://aistudio.google.com/ in your browser
    - Step-by-step instructions for creating an API key
    - Secure terminal-based key entry
 
-2. **Qwen API Setup**:
+4. **Qwen API Setup**:
    - Option to open https://help.aliyun.com/product/148140.html in your browser
    - Guidance for creating an Alibaba Cloud account
    - Secure terminal-based key entry
 
-3. **Configuration Management**:
+5. **OpenRouter API Setup**:
+   - Option to open https://openrouter.ai/keys in your browser
+   - Guidance for creating a free API key
+   - Secure terminal-based key entry
+
+6. **Configuration Management**:
    - Automatic .env file creation and management
    - Secure storage of API keys
    - Option to update existing keys
@@ -106,7 +123,6 @@ The setup process will automatically open the appropriate websites in your brows
 - Node.js (v14 or higher)
 - npm (usually comes with Node.js)
 - Git (for cloning the repository)
-- Ollama (for local AI processing)
 - Sprite MCP (for automated testing - optional but recommended)
 
 ## Installation
@@ -126,9 +142,10 @@ The setup process will automatically open the appropriate websites in your brows
    ```
 
 3. Follow the prompts to:
-   - Install Ollama (for local AI processing)
+   - Choose your preferred AI processing (local, cloud, or both)
+   - Install Ollama (for local AI processing, if selected)
    - Install Sprite MCP (for testing - optional)
-   - Get API keys for remote services (Gemini, Qwen)
+   - Get API keys for selected services
    - Configure the tool
 
 ### Method 2: Manual Installation
@@ -144,18 +161,31 @@ The setup process will automatically open the appropriate websites in your brows
    npm install
    ```
 
-3. Install Ollama for local AI processing:
+3. Choose your AI processing option:
+
+   For local AI processing (requires GPU for best performance):
    ```bash
    curl -fsSL https://ollama.com/install.sh | sh
    ```
 
-4. Install Sprite MCP for testing (optional):
+   For cloud AI processing (no GPU required):
+   - No additional installation needed
+
+4. Install required local models (if using local processing):
+   ```bash
+   ollama pull smollm2:1.7b
+   ollama pull codellama:7b-instruct
+   ollama pull codegemma:2b
+   ollama pull tinyllama:1.1b
+   ```
+
+5. Install Sprite MCP for testing (optional):
    ```bash
    # Check Sprite MCP documentation for installation instructions
    # https://github.com/sprite-mcp/sprite
    ```
 
-5. Configure API keys using interactive setup:
+6. Configure API keys using interactive setup:
    ```bash
    hybrid-ai --setup
    ```
@@ -166,7 +196,7 @@ The setup process will automatically open the appropriate websites in your brows
    nano .env  # Add your API keys here
    ```
 
-6. Link the CLI tool:
+7. Link the CLI tool:
    ```bash
    npm link
    ```
@@ -188,6 +218,9 @@ hybrid-ai --remote "Design a microservices architecture for e-commerce"
 # Force local implementation only
 hybrid-ai --local "Generate a for loop in Python"
 
+# Process an image (UI design, documentation, etc.)
+hybrid-ai -i "path/to/design.png" "Convert this UI design to a React component"
+
 # Interactive API key setup
 hybrid-ai --setup
 ```
@@ -204,6 +237,44 @@ Or directly run the GUI script:
 node src/gui.js
 ```
 
+## AI Service Options
+
+The tool supports multiple AI processing options based on your hardware and preferences:
+
+### Local Processing (with GPU)
+Best for privacy and performance:
+```bash
+# Uses local models via Ollama
+hybrid-ai --local "Create a Python script to process CSV data"
+```
+
+### Cloud Processing (no GPU required)
+Free service via OpenRouter API:
+```bash
+# Uses cloud models when local processing is not available
+hybrid-ai "Create a Flutter app for task management"
+```
+
+### Senior Developer Guidance
+For complex tasks requiring expert input:
+```bash
+# Uses Gemini or Qwen for architecture and code reviews
+hybrid-ai --complexity high "Design a scalable web application with React and Node.js"
+```
+
+### Image Processing
+Analyze UI designs and documentation:
+```bash
+# Process UI designs
+hybrid-ai -i "design.png" "Convert this UI design to a responsive HTML/CSS template"
+
+# Analyze documentation diagrams
+hybrid-ai -i "architecture.png" "Explain this system architecture diagram"
+
+# Extract information from screenshots
+hybrid-ai -i "code-screenshot.png" "Convert this code screenshot to actual code"
+```
+
 ## Roles in the System
 
 ### 🏢 Senior Developer (Remote AI - Gemini/Qwen)
@@ -215,12 +286,12 @@ node src/gui.js
   - Share best practices and expert insights
   - Guide the development process
 
-### ⌨️ Implementation Team (Local AI - Ollama)
+### ⌨️ Implementation Team (Multiple AI Options)
 - **Role**: Professional developers
 - **Responsibilities**:
   - Implement solutions based on senior developer specifications
   - Use specialized models for different task types
-  - Work locally to maintain privacy and efficiency
+  - Work locally or via cloud services based on configuration
   - Apply improvements suggested by senior developers
 
 ### 🧪 Testing Framework (Sprite MCP)
@@ -250,7 +321,7 @@ node src/gui.js
 ### 🧠 Model Selection System
 - **Role**: Optimization specialist
 - **Responsibilities**:
-  - Choose optimal local models based on task type
+  - Choose optimal models based on task type and hardware
   - Select implementation models for coding tasks
   - Choose improvement models for code refinement
   - Balance performance and accuracy
@@ -261,11 +332,20 @@ node src/gui.js
 - Gemini (Google)
 - Qwen (Alibaba Cloud)
 
-### Implementation Team (Local):
+### Implementation Team (Local - Ollama):
 - CodeLlama (7B) - For Flutter/Dart and complex coding tasks
 - SmolLM2 (1.7B) - For JavaScript, PHP, and general tasks
 - CodeGemma (2B) - For Python and code analysis tasks
 - TinyLlama (1.1B) - For simple tasks and quick responses
+
+### Implementation Team (Cloud - OpenRouter):
+- Mistral 7B - For general coding tasks
+- Gemma 7B - For code analysis tasks
+- Llama 2 13B - For complex reasoning tasks
+- Phi-3 Mini - For efficient processing
+- CodeLlama 70B - For complex coding tasks
+- Llama 3 8B - For balanced performance
+- Vision Models - For image processing tasks
 
 ## Configuration
 
@@ -276,13 +356,17 @@ The `.env` file contains all configuration options:
 GEMINI_API_KEY=your_gemini_api_key_here
 QWEN_API_KEY=your_qwen_api_key_here
 
-# Implementation Team Settings
+# Cloud Implementation Team Settings (OpenRouter)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+# Local Implementation Team Settings (Ollama)
 LOCAL_AI_PROVIDER=ollama
 LOCAL_AI_BASE_URL=http://localhost:11434
 
 # Default Models
-DEFAULT_IMPLEMENTATION_MODEL=smollm2:1.7b
-DEFAULT_SENIOR_MODEL=gemini-pro
+DEFAULT_LOCAL_MODEL=smollm2:1.7b
+DEFAULT_REMOTE_MODEL=gemini-pro
+DEFAULT_OPENROUTER_MODEL=mistralai/mistral-7b-instruct-v0.2
 
 # Complexity Threshold (characters)
 COMPLEXITY_THRESHOLD=100
@@ -315,7 +399,30 @@ The tool automatically detects task types and selects appropriate models:
 - **Python**: Uses CodeLlama for backend development
 - **Java**: Uses CodeLlama for enterprise applications
 - **PHP/Laravel**: Uses SmolLM2 for web development
+- **Image/UI Design**: Uses vision models for processing images
 - **General**: Uses balanced models for mixed tasks
+
+## Image Processing Capabilities
+
+The tool can process images for various purposes:
+
+- **UI Design Analysis**: Convert UI mockups to code implementations
+- **Documentation Processing**: Extract information from diagrams and charts
+- **Code Screenshot Conversion**: Convert code screenshots to actual code
+- **Visual Problem Solving**: Analyze visual problems and provide solutions
+
+Supported image formats:
+- JPEG
+- PNG
+- GIF
+- WebP
+
+To use image processing:
+```bash
+hybrid-ai -i "path/to/image.png" "Describe what you see in this image"
+```
+
+The tool automatically selects the best vision model available from your configured services.
 
 ## Troubleshooting
 
@@ -335,6 +442,10 @@ The tool automatically detects task types and selects appropriate models:
 4. **"Sprite MCP not available"**:
    - Install Sprite MCP framework for comprehensive testing
    - Tool will work without it but with limited testing capabilities
+
+5. **"No vision models available"**:
+   - Ensure you have configured OpenRouter API key for image processing
+   - Or install local vision models if available
 
 ### Getting Help
 

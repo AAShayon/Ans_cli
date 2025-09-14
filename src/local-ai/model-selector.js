@@ -1,3 +1,5 @@
+const config = require('../config');
+
 /**
  * Select the optimal model based on task type and purpose
  * @param {string} task - The task to analyze
@@ -23,6 +25,8 @@ function selectOptimalModel(task, purpose) {
     taskType = 'php';
   } else if (taskLower.includes('node') || taskLower.includes('express')) {
     taskType = 'javascript';
+  } else if (taskLower.includes('image') || taskLower.includes('design') || taskLower.includes('ui')) {
+    taskType = 'image';
   }
   
   // Select model based on purpose and task type
@@ -44,6 +48,10 @@ function selectOptimalModel(task, purpose) {
           return 'codellama:7b-instruct';
         case 'php':
           return 'smollm2:1.7b';
+        case 'image':
+          // For image/UI tasks, use a model with vision capabilities
+          return config.openrouterAI.availableModels.find(model => model.includes('vision')) || 
+                 'microsoft/phi-3-mini-128k-instruct';
         default:
           return 'smollm2:1.7b';
       }
@@ -61,6 +69,10 @@ function selectOptimalModel(task, purpose) {
           return 'codellama:7b-instruct';
         case 'php':
           return 'codegemma:2b';
+        case 'image':
+          // For image/UI tasks, use a model with vision capabilities
+          return config.openrouterAI.availableModels.find(model => model.includes('vision')) || 
+                 'microsoft/phi-3-mini-128k-instruct';
         default:
           return 'codegemma:2b';
       }
@@ -83,6 +95,9 @@ function getAvailableModels(taskType) {
     'python': ['codellama:7b-instruct', 'smollm2:1.7b', 'codegemma:2b'],
     'java': ['codellama:7b-instruct', 'smollm2:1.7b'],
     'php': ['smollm2:1.7b', 'codegemma:2b'],
+    'image': config.openrouterAI.availableModels.filter(model => model.includes('vision')).length > 0 ? 
+             config.openrouterAI.availableModels.filter(model => model.includes('vision')) : 
+             ['microsoft/phi-3-mini-128k-instruct', 'meta-llama/llama-3-8b-instruct'],
     'general': ['smollm2:1.7b', 'tinyllama:1.1b', 'codegemma:2b']
   };
   

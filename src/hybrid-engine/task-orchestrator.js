@@ -1,6 +1,7 @@
 const chalk = require('chalk');
 const { executeLocalTask } = require('../local-ai/ollama-client');
 const { executeRemoteTask } = require('../remote-ai/gemini-client');
+const { executeOpenRouterTask } = require('../openrouter-client');
 const { selectOptimalModel } = require('../local-ai/model-selector');
 const { runSpriteMCPTests } = require('../testing/sprite-mcp');
 const { startMotivationalSpeeches, stopMotivationalSpeeches } = require('../utils/speech-display');
@@ -26,6 +27,16 @@ async function executeTask(task, decision) {
         
         stopMotivationalSpeeches(speechInterval);
         return localResult;
+        
+      case 'openrouter':
+        // Using OpenRouter for task processing
+        console.log(chalk.blue.bold('\n☁️  Using OpenRouter Cloud Processing...\n'));
+        speechInterval = startMotivationalSpeeches('general', 8000);
+        
+        const openRouterResult = await executeOpenRouterTask(task, decision.model);
+        
+        stopMotivationalSpeeches(speechInterval);
+        return openRouterResult;
         
       case 'remote':
         // Consulting with senior architect for complex design decisions
@@ -90,23 +101,40 @@ async function executeProfessionalWorkflow(task, decision) {
     
     stopMotivationalSpeeches(speechInterval);
     
-    // Step 2: Code Implementation by local models
+    // Step 2: Code Implementation by local models or OpenRouter
     console.log(chalk.green.bold('\n Phase 2: Code Implementation'));
     console.log(chalk.gray('==========================\n'));
     speechInterval = startMotivationalSpeeches('implementation', 10000);
     
     const implementationModel = selectOptimalModel(task, 'implementation');
-    const initialImplementation = await executeLocalTask(
-      `You are a professional developer implementing a solution based on senior architect specifications.
-       
-       Architecture Specifications: ${architectureSpec}
-       
-       Original Task: ${task}
-       
-       Implement a professional, production-ready solution that follows all specifications.
-       Write clean, well-documented, and maintainable code.`, 
-      implementationModel
-    );
+    
+    // Use OpenRouter if it's the configured approach, otherwise use local
+    let initialImplementation;
+    if (decision.localModel && decision.localModel.includes('openrouter')) {
+      initialImplementation = await executeOpenRouterTask(
+        `You are a professional developer implementing a solution based on senior architect specifications.
+         
+         Architecture Specifications: ${architectureSpec}
+         
+         Original Task: ${task}
+         
+         Implement a professional, production-ready solution that follows all specifications.
+         Write clean, well-documented, and maintainable code.`, 
+        implementationModel
+      );
+    } else {
+      initialImplementation = await executeLocalTask(
+        `You are a professional developer implementing a solution based on senior architect specifications.
+         
+         Architecture Specifications: ${architectureSpec}
+         
+         Original Task: ${task}
+         
+         Implement a professional, production-ready solution that follows all specifications.
+         Write clean, well-documented, and maintainable code.`, 
+        implementationModel
+      );
+    }
     
     stopMotivationalSpeeches(speechInterval);
     
@@ -154,17 +182,34 @@ async function executeProfessionalWorkflow(task, decision) {
     speechInterval = startMotivationalSpeeches('improvement', 10000);
     
     const improvementModel = selectOptimalModel(task, 'improvement');
-    const improvedImplementation = await executeLocalTask(
-      `You are a professional developer improving your code based on senior reviewer feedback.
-       
-       Original Implementation: ${initialImplementation}
-       Test Results: ${JSON.stringify(testResults)}
-       Code Review: ${codeReview}
-       
-       Implement all suggested improvements professionally.
-       Show both the original code and your improvements clearly.`, 
-      improvementModel
-    );
+    
+    // Use OpenRouter if it's the configured approach, otherwise use local
+    let improvedImplementation;
+    if (decision.localModel && decision.localModel.includes('openrouter')) {
+      improvedImplementation = await executeOpenRouterTask(
+        `You are a professional developer improving your code based on senior reviewer feedback.
+         
+         Original Implementation: ${initialImplementation}
+         Test Results: ${JSON.stringify(testResults)}
+         Code Review: ${codeReview}
+         
+         Implement all suggested improvements professionally.
+         Show both the original code and your improvements clearly.`, 
+        improvementModel
+      );
+    } else {
+      improvedImplementation = await executeLocalTask(
+        `You are a professional developer improving your code based on senior reviewer feedback.
+         
+         Original Implementation: ${initialImplementation}
+         Test Results: ${JSON.stringify(testResults)}
+         Code Review: ${codeReview}
+         
+         Implement all suggested improvements professionally.
+         Show both the original code and your improvements clearly.`, 
+        improvementModel
+      );
+    }
     
     stopMotivationalSpeeches(speechInterval);
     

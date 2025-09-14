@@ -22,33 +22,34 @@ class APIKeyManager {
    */
   getAPIKeys(cliOptions = {}) {
     // 1. Check command line arguments first
-    if (cliOptions.geminiKey || cliOptions.qwenKey) {
+    if (cliOptions.geminiKey || cliOptions.qwenKey || cliOptions.openrouterKey) {
       return {
         gemini: cliOptions.geminiKey,
-        qwen: cliOptions.qwenKey
+        qwen: cliOptions.qwenKey,
+        openrouter: cliOptions.openrouterKey
       };
     }
 
     // 2. Check environment variables
     const envKeys = this.getKeysFromEnvironment();
-    if (envKeys.gemini || envKeys.qwen) {
+    if (envKeys.gemini || envKeys.qwen || envKeys.openrouter) {
       return envKeys;
     }
 
     // 3. Check local .env file
     const localKeys = this.getKeysFromLocalConfig();
-    if (localKeys.gemini || localKeys.qwen) {
+    if (localKeys.gemini || localKeys.qwen || localKeys.openrouter) {
       return localKeys;
     }
 
     // 4. Check global configuration file
     const globalKeys = this.getKeysFromGlobalConfig();
-    if (globalKeys.gemini || globalKeys.qwen) {
+    if (globalKeys.gemini || globalKeys.qwen || globalKeys.openrouter) {
       return globalKeys;
     }
 
     // No keys found
-    return { gemini: null, qwen: null };
+    return { gemini: null, qwen: null, openrouter: null };
   }
 
   /**
@@ -58,7 +59,8 @@ class APIKeyManager {
   getKeysFromEnvironment() {
     return {
       gemini: process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY,
-      qwen: process.env.QWEN_API_KEY || process.env.ALIBABA_CLOUD_ACCESS_KEY_SECRET
+      qwen: process.env.QWEN_API_KEY || process.env.ALIBABA_CLOUD_ACCESS_KEY_SECRET,
+      openrouter: process.env.OPENROUTER_API_KEY
     };
   }
 
@@ -68,7 +70,7 @@ class APIKeyManager {
    */
   getKeysFromLocalConfig() {
     if (!fs.existsSync(this.configPath)) {
-      return { gemini: null, qwen: null };
+      return { gemini: null, qwen: null, openrouter: null };
     }
 
     try {
@@ -77,11 +79,12 @@ class APIKeyManager {
       
       return {
         gemini: config.GEMINI_API_KEY,
-        qwen: config.QWEN_API_KEY
+        qwen: config.QWEN_API_KEY,
+        openrouter: config.OPENROUTER_API_KEY
       };
     } catch (error) {
       console.warn('Warning: Could not read local .env file');
-      return { gemini: null, qwen: null };
+      return { gemini: null, qwen: null, openrouter: null };
     }
   }
 
@@ -91,7 +94,7 @@ class APIKeyManager {
    */
   getKeysFromGlobalConfig() {
     if (!fs.existsSync(this.globalConfigPath)) {
-      return { gemini: null, qwen: null };
+      return { gemini: null, qwen: null, openrouter: null };
     }
 
     try {
@@ -99,7 +102,7 @@ class APIKeyManager {
       return JSON.parse(configContent);
     } catch (error) {
       console.warn('Warning: Could not read global config file');
-      return { gemini: null, qwen: null };
+      return { gemini: null, qwen: null, openrouter: null };
     }
   }
 
@@ -142,6 +145,9 @@ GEMINI_API_KEY=your_gemini_api_key_here
 # Qwen API Key (required for remote Qwen access)
 QWEN_API_KEY=your_qwen_api_key_here
 
+# OpenRouter API Key (for free cloud-based AI models)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+
 # Local AI Settings
 LOCAL_AI_PROVIDER=ollama
 LOCAL_AI_BASE_URL=http://localhost:11434
@@ -149,6 +155,7 @@ LOCAL_AI_BASE_URL=http://localhost:11434
 # Default Models
 DEFAULT_LOCAL_MODEL=smollm2:1.7b
 DEFAULT_REMOTE_MODEL=gemini-pro
+DEFAULT_OPENROUTER_MODEL=mistralai/mistral-7b-instruct-v0.2
 
 # Complexity Threshold (characters)
 COMPLEXITY_THRESHOLD=100
@@ -179,6 +186,18 @@ COMPLEXITY_THRESHOLD=100
       }
     }
     
+    // Update OpenRouter key if provided
+    if (keys.openrouter) {
+      if (envContent.includes('OPENROUTER_API_KEY=')) {
+        envContent = envContent.replace(
+          /OPENROUTER_API_KEY=.*/,
+          `OPENROUTER_API_KEY=${keys.openrouter}`
+        );
+      } else {
+        envContent += `\nOPENROUTER_API_KEY=${keys.openrouter}`;
+      }
+    }
+    
     fs.writeFileSync(this.configPath, envContent);
   }
 
@@ -193,7 +212,7 @@ COMPLEXITY_THRESHOLD=100
   /**
    * Validate API key format
    * @param {string} key - API key to validate
-   * @param {string} service - Service name (gemini or qwen)
+   * @param {string} service - Service name (gemini, qwen, or openrouter)
    * @returns {boolean} - Whether key format is valid
    */
   validateKey(key, service) {
@@ -210,6 +229,9 @@ COMPLEXITY_THRESHOLD=100
       case 'qwen':
         // Qwen/Alibaba keys can vary in format
         return /^[A-Za-z0-9]+$/.test(key) || key.length > 20;
+      case 'openrouter':
+        // OpenRouter keys are typically long strings
+        return /^[A-Za-z0-9_-]+$/.test(key);
       default:
         return true;
     }
@@ -223,7 +245,8 @@ COMPLEXITY_THRESHOLD=100
   checkKeyValidity(keys) {
     return {
       gemini: this.validateKey(keys.gemini, 'gemini'),
-      qwen: this.validateKey(keys.qwen, 'qwen')
+      qwen: this.validateKey(keys.qwen, 'qwen'),
+      openrouter: this.validateKey(keys.openrouter, 'openrouter')
     };
   }
 }

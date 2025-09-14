@@ -1,4 +1,5 @@
 const config = require('../config');
+const APIKeyManager = require('../utils/api-key-manager');
 
 /**
  * Make a decision on how to process a task using the professor-student model
@@ -8,13 +9,31 @@ const config = require('../config');
  * @returns {object} - Decision object with approach and model
  */
 async function makeDecision(task, complexity, options) {
+  // Check which AI services are configured
+  const keyManager = new APIKeyManager();
+  const keys = keyManager.getAPIKeys();
+  const validity = keyManager.checkKeyValidity(keys);
+  
+  const hasLocal = process.env.LOCAL_AI_PROVIDER || config.local.provider;
+  const hasOpenRouter = validity.openrouter;
+  const hasRemote = validity.gemini || validity.qwen;
+  
   // If forced student or professor, respect that
   if (options.local) {
-    return {
-      approach: 'local',
-      model: options.model || config.local.defaultModel,
-      reason: 'Student working independently'
-    };
+    // Use OpenRouter if configured, otherwise fall back to local
+    if (hasOpenRouter) {
+      return {
+        approach: 'openrouter',
+        model: options.model || config.openrouterAI.defaultModel,
+        reason: 'Using OpenRouter for task processing'
+      };
+    } else {
+      return {
+        approach: 'local',
+        model: options.model || config.local.defaultModel,
+        reason: 'Student working independently'
+      };
+    }
   }
   
   if (options.remote) {
@@ -28,34 +47,84 @@ async function makeDecision(task, complexity, options) {
   // Otherwise, decide based on complexity using professor-student approach
   switch (complexity) {
     case 'independent':
-      return {
-        approach: 'local',
-        model: options.model || config.local.defaultModel,
-        reason: 'Simple task - student can work independently'
-      };
+      // Use OpenRouter if configured, otherwise fall back to local
+      if (hasOpenRouter) {
+        return {
+          approach: 'openrouter',
+          model: options.model || config.openrouterAI.defaultModel,
+          reason: 'Simple task - using OpenRouter for processing'
+        };
+      } else {
+        return {
+          approach: 'local',
+          model: options.model || config.local.defaultModel,
+          reason: 'Simple task - student can work independently'
+        };
+      }
       
     case 'guided':
-      return {
-        approach: 'hybrid',
-        model: options.model || config.remote.defaultModel,
-        localModel: config.local.defaultModel,
-        reason: 'Moderate task - professor provides guidance, student executes'
-      };
+      // Use remote (professors) for guidance
+      if (hasRemote) {
+        return {
+          approach: 'hybrid',
+          model: options.model || config.remote.defaultModel,
+          localModel: hasOpenRouter ? config.openrouterAI.defaultModel : config.local.defaultModel,
+          reason: 'Moderate task - professor provides guidance, student executes'
+        };
+      } else if (hasOpenRouter) {
+        // If no remote keys but have OpenRouter, use OpenRouter for both
+        return {
+          approach: 'openrouter',
+          model: options.model || config.openrouterAI.defaultModel,
+          reason: 'Moderate task - using OpenRouter for processing'
+        };
+      } else {
+        // Fall back to local
+        return {
+          approach: 'local',
+          model: options.model || config.local.defaultModel,
+          reason: 'Moderate task - student working independently'
+        };
+      }
       
     case 'direct-professor':
-      return {
-        approach: 'remote',
-        model: options.model || config.remote.defaultModel,
-        reason: 'Complex task - requires direct professor consultation'
-      };
+      if (hasRemote) {
+        return {
+          approach: 'remote',
+          model: options.model || config.remote.defaultModel,
+          reason: 'Complex task - requires direct professor consultation'
+        };
+      } else if (hasOpenRouter) {
+        // If no remote keys but have OpenRouter, use OpenRouter for complex tasks
+        return {
+          approach: 'openrouter',
+          model: options.model || config.openrouterAI.defaultModel,
+          reason: 'Complex task - using OpenRouter for processing'
+        };
+      } else {
+        // Fall back to local
+        return {
+          approach: 'local',
+          model: options.model || config.local.defaultModel,
+          reason: 'Complex task - student working independently (no remote access)'
+        };
+      }
       
     default:
       // Default to student working independently for simple tasks
-      return {
-        approach: 'local',
-        model: options.model || config.local.defaultModel,
-        reason: 'Defaulting to student working independently'
-      };
+      if (hasOpenRouter) {
+        return {
+          approach: 'openrouter',
+          model: options.model || config.openrouterAI.defaultModel,
+          reason: 'Defaulting to OpenRouter for task processing'
+        };
+      } else {
+        return {
+          approach: 'local',
+          model: options.model || config.local.defaultModel,
+          reason: 'Defaulting to student working independently'
+        };
+      }
   }
 }
 

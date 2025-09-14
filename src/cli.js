@@ -15,9 +15,9 @@ async function executeHybridTask(task, options) {
   
   // If this is a remote or hybrid task, check for API keys
   if (!options.local && (options.remote || options.complexity === 'high' || task.length > 100)) {
-    if (!keysConfigured.gemini && !keysConfigured.qwen) {
+    if (!keysConfigured.gemini && !keysConfigured.qwen && !keysConfigured.openrouter) {
       console.log(chalk.yellow('⚠️  API keys not configured for remote AI services'));
-      console.log(chalk.gray('Remote processing requires API keys for Gemini or Qwen\n'));
+      console.log(chalk.gray('Remote processing requires API keys for Gemini, Qwen, or OpenRouter\n'));
       
       const { setupKeys } = await require('prompts')({
         type: 'confirm',
@@ -31,7 +31,7 @@ async function executeHybridTask(task, options) {
         // Reload configuration
         Object.assign(keysConfigured, setup.areKeysConfigured());
       } else {
-        console.log(chalk.gray('Continuing with local processing only...'));
+        console.log(chalk.gray('Continuing with local/OpenRouter processing only...'));
         options.local = true;
       }
     }

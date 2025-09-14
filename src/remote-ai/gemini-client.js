@@ -2,6 +2,7 @@ const axios = require('axios');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const config = require('../config');
 const APIKeyManager = require('../utils/api-key-manager');
+const { executeOpenRouterTask } = require('../openrouter-client');
 
 /**
  * Execute a task using Gemini AI
@@ -84,6 +85,11 @@ async function executeQwenTask(task, model) {
  * @returns {string} - The result from the AI model
  */
 async function executeRemoteTask(task, model) {
+  // Check if this is an OpenRouter model
+  if (config.openrouterAI.availableModels.includes(model)) {
+    return await executeOpenRouterTask(task, model);
+  }
+  
   // For now, default to Gemini
   // In a more advanced implementation, you could choose based on model name
   if (model.startsWith('qwen')) {

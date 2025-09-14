@@ -13,11 +13,32 @@ const config = {
     baseUrl: 'https://dashscope.aliyuncs.com/api/v1'
   },
   
+  openrouter: {
+    apiKey: process.env.OPENROUTER_API_KEY || '',
+    baseUrl: 'https://openrouter.ai/api/v1'
+  },
+  
   // Local AI Settings
   local: {
     provider: process.env.LOCAL_AI_PROVIDER || 'ollama',
     baseUrl: process.env.LOCAL_AI_BASE_URL || 'http://localhost:11434',
     defaultModel: process.env.DEFAULT_LOCAL_MODEL || 'smollm2:1.7b'
+  },
+  
+  // OpenRouter AI Settings
+  openrouterAI: {
+    provider: 'openrouter',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    defaultModel: process.env.DEFAULT_OPENROUTER_MODEL || 'mistralai/mistral-7b-instruct-v0.2',
+    availableModels: [
+      'mistralai/mistral-7b-instruct-v0.2',
+      'google/gemma-7b-it',
+      'meta-llama/llama-2-13b-chat',
+      'microsoft/phi-3-mini-128k-instruct',
+      'mistralai/codestral-mamba',
+      'codellama/codellama-70b-instruct',
+      'meta-llama/llama-3-8b-instruct'
+    ]
   },
   
   // Remote AI Settings
