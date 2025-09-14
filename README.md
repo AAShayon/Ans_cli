@@ -1,10 +1,11 @@
-# Hybrid AI CLI/GUI Tool
+# Hybrid AI CLI/GUI Tool - Professor-Student-Mentor Model
 
-A powerful tool that combines local and remote AI models following a "professor-student" approach:
-- **Remote AI (Gemini/Qwen)** = Professor (provides expert guidance and precise instructions)
-- **Local AI (Ollama)** = Student (executes the professor's instructions locally)
+A sophisticated AI tool that implements a complete educational workflow:
+- **Professor (Gemini/Qwen)**: Creates plans, provides expert instructions, and evaluates code quality
+- **Student (Ollama)**: Implements solutions and applies improvements
+- **Mentor (Gemini/Qwen)**: Tests code, identifies issues, and provides detailed feedback
 
-This approach gives you the best of both worlds: expert-level guidance from remote AI with the privacy and speed of local execution.
+This approach mimics a complete university learning cycle where students receive expert guidance, implement solutions, get evaluated, and then improve based on feedback.
 
 Users can choose between:
 - **CLI Mode**: Command-line interface for power users
@@ -12,20 +13,45 @@ Users can choose between:
 
 ## Features
 
-- **Professor-Student Model**: Remote AI provides expert instructions, local AI executes them
-- **Privacy First**: Sensitive data stays local during execution
+- **Complete Educational Workflow**: Plan → Implement → Test → Evaluate → Improve
+- **Multi-AI Collaboration**: Three distinct AI roles working together
+- **Automated Code Validation**: Built-in testing and validation
+- **Privacy First**: Sensitive data stays local during implementation
 - **Resource Efficient**: Works on limited hardware
 - **Multi-Model Support**: Gemini, Qwen, and Ollama integration
 - **Task Orchestration**: Complex tasks broken down into manageable steps
 - **Dual Interface**: Both CLI and GUI options available
 
-## How It Works
+## The Professor-Student-Mentor Workflow
 
-1. **Simple Tasks**: Student (local AI) handles them independently
-2. **Complex Tasks**: 
-   - Professor (remote AI) provides detailed, expert instructions
-   - Student (local AI) executes those precise instructions
-3. **Result Delivery**: You get both the expert guidance and the executed work
+When you use the hybrid mode for complex tasks, the tool follows this complete cycle:
+
+1. **🎓 Professor Phase**: 
+   - Creates a comprehensive plan and detailed instructions
+   - Provides expert-level guidance and best practices
+
+2. **👨‍🎓 Student Phase**: 
+   - Implements the solution based on the professor's instructions
+   - Works locally to maintain privacy and efficiency
+
+3. **🧪 Automated Testing**: 
+   - Runs basic syntax and validation checks
+   - Identifies immediate issues
+
+4. **📊 Mentor Evaluation**: 
+   - Conducts thorough code quality assessment
+   - Identifies issues, bugs, and improvement areas
+
+5. **🔍 Professor Feedback**: 
+   - Analyzes evaluation results
+   - Provides targeted improvement instructions
+
+6. **🛠 Student Implementation**: 
+   - Implements all suggested improvements
+   - Produces final, high-quality code
+
+7. **🏁 Final Validation**: 
+   - Verifies improvements were successfully implemented
 
 ## Prerequisites
 
@@ -101,10 +127,10 @@ Users can choose between:
 # Basic usage (student works independently)
 hybrid-ai "What is a variable in JavaScript?"
 
-# Complex task (professor provides guidance, student executes)
+# Complex task (complete professor-student-mentor workflow)
 hybrid-ai --complexity high "Create a complete React authentication system"
 
-# Force professor-direct consultation
+# Force direct professor consultation
 hybrid-ai --remote "Explain quantum computing in simple terms"
 
 # Force student-only work
@@ -123,33 +149,52 @@ Or directly run the GUI script:
 node src/gui.js
 ```
 
-## The Professor-Student Approach
+## Roles in the System
 
-When you use the hybrid mode for complex tasks:
+### 🎓 Professor (Remote AI - Gemini/Qwen)
+- **Role**: Expert instructor and planner
+- **Responsibilities**:
+  - Create comprehensive implementation plans
+  - Provide detailed, step-by-step instructions
+  - Share best practices and expert insights
+  - Analyze code evaluations and provide improvement instructions
+  - Guide the student through complex problem-solving
 
-1. **Professor Phase**: Remote AI (Gemini/Qwen) acts as an expert professor, providing:
-   - Detailed step-by-step instructions
-   - Best practices and expert insights
-   - Specific guidance tailored to your task
+### 👨‍🎓 Student (Local AI - Ollama)
+- **Role**: Implementation specialist
+- **Responsibilities**:
+  - Implement solutions based on professor's instructions
+  - Apply improvements suggested by the professor
+  - Work locally to maintain privacy and efficiency
+  - Show work clearly with explanations
 
-2. **Student Phase**: Local AI (Ollama) acts as a diligent student, responsible for:
-   - Executing the professor's instructions precisely
-   - Implementing the plan step by step
-   - Showing the work clearly
+### 📊 Mentor (Remote AI - Gemini/Qwen)
+- **Role**: Quality assurance and evaluator
+- **Responsibilities**:
+  - Conduct thorough code quality assessments
+  - Identify bugs, issues, and improvement areas
+  - Provide detailed, constructive feedback
+  - Evaluate adherence to best practices
 
-3. **Result**: You get both the expert guidance and the executed implementation
+### 🧪 Automated Testing
+- **Role**: Immediate quality checker
+- **Responsibilities**:
+  - Run basic syntax validation
+  - Perform automated testing
+  - Identify immediate issues
+  - Provide quick feedback
 
 ## Models Used
 
-- **Local (Student)**: Ollama with SmolLM2, CodeGemma, TinyLlama
-- **Remote (Professor)**: Gemini (Google), Qwen (Alibaba Cloud)
+- **Student**: Ollama with SmolLM2, CodeGemma, TinyLlama
+- **Professor/Mentor**: Gemini (Google), Qwen (Alibaba Cloud)
 
 ## Configuration
 
 The `.env` file contains all configuration options:
 
 ```env
-# Professor API Keys
+# Professor/Mentor API Keys
 GEMINI_API_KEY=your_gemini_api_key_here
 QWEN_API_KEY=your_qwen_api_key_here
 
@@ -164,6 +209,20 @@ DEFAULT_PROFESSOR_MODEL=gemini-pro
 # Complexity Threshold (characters)
 COMPLEXITY_THRESHOLD=100
 ```
+
+## Example Workflow
+
+When you ask the tool to "Create a React login form with validation":
+
+1. **Professor** creates a detailed plan covering component structure, validation logic, and best practices
+2. **Student** implements the React component based on the plan
+3. **Automated Testing** checks for syntax errors
+4. **Mentor** evaluates the code quality, identifying potential improvements
+5. **Professor** provides specific feedback on how to improve the implementation
+6. **Student** implements the suggested improvements
+7. **Final Validation** confirms all improvements were successfully applied
+
+The result includes all phases of the workflow, giving you both expert guidance and a high-quality implementation.
 
 ## Troubleshooting
 
