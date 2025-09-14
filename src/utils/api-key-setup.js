@@ -1,15 +1,14 @@
 const prompts = require('prompts');
-const fs = require('fs');
-const path = require('path');
 const open = require('open');
 const chalk = require('chalk');
+const APIKeyManager = require('./api-key-manager');
 
 /**
  * Interactive API key setup for remote AI services
  */
 class APIKeySetup {
   constructor() {
-    this.configPath = path.join(process.cwd(), '.env');
+    this.keyManager = new APIKeyManager();
   }
 
   /**
@@ -20,23 +19,22 @@ class APIKeySetup {
     console.log(chalk.gray('This setup will help you configure API keys for remote AI services.'));
     console.log(chalk.gray('You can skip any service and configure it later.\n'));
     
-    // Check if .env file exists
-    const envExists = fs.existsSync(this.configPath);
-    if (!envExists) {
-      this.createEnvFile();
-    }
-    
-    // Load existing config
-    const config = this.loadConfig();
+    // Get existing keys
+    const existingKeys = this.keyManager.getAPIKeys();
     
     // Setup Gemini API key
-    await this.setupGeminiKey(config);
+    const geminiKey = await this.setupGeminiKey(existingKeys.gemini);
     
     // Setup Qwen API key
-    await this.setupQwenKey(config);
+    const qwenKey = await this.setupQwenKey(existingKeys.qwen);
     
     // Save configuration
-    this.saveConfig(config);
+    const newKeys = {
+      gemini: geminiKey || existingKeys.gemini,
+      qwen: qwenKey || existingKeys.qwen
+    };
+    
+    this.keyManager.saveKeysToLocalConfig(newKeys);
     
     console.log(chalk.green.bold('\n✅ API key setup completed!\n'));
     console.log(chalk.gray('Configuration saved to .env file'));
@@ -45,12 +43,12 @@ class APIKeySetup {
   /**
    * Setup Gemini API key
    */
-  async setupGeminiKey(config) {
+  async setupGeminiKey(existingKey) {
     console.log(chalk.cyan('\n🔮 Google Gemini API Setup'));
     console.log(chalk.gray('=========================='));
     
-    if (config.GEMINI_API_KEY && config.GEMINI_API_KEY !== 'your_gemini_api_key_here') {
-      console.log(chalk.green(`✓ Already configured: ${config.GEMINI_API_KEY.substring(0, 8)}...`));
+    if (existingKey && existingKey !== 'your_gemini_api_key_here') {
+      console.log(chalk.green(`✓ Already configured: ${existingKey.substring(0, 8)}...`));
       const { change } = await prompts({
         type: 'confirm',
         name: 'change',
@@ -58,7 +56,7 @@ class APIKeySetup {
         initial: false
       });
       
-      if (!change) return;
+      if (!change) return existingKey;
     }
     
     console.log(chalk.gray('\nTo get a Gemini API key:'));
@@ -98,25 +96,27 @@ class APIKeySetup {
         });
         
         if (apiKey) {
-          config.GEMINI_API_KEY = apiKey;
           console.log(chalk.green('✅ Gemini API key saved!'));
+          return apiKey;
         }
         break;
       case 'skip':
         console.log(chalk.yellow('Skipped Gemini API setup.'));
         break;
     }
+    
+    return existingKey;
   }
 
   /**
    * Setup Qwen API key
    */
-  async setupQwenKey(config) {
+  async setupQwenKey(existingKey) {
     console.log(chalk.cyan('\n🐉 Alibaba Qwen API Setup'));
     console.log(chalk.gray('========================='));
     
-    if (config.QWEN_API_KEY && config.QWEN_API_KEY !== 'your_qwen_api_key_here') {
-      console.log(chalk.green(`✓ Already configured: ${config.QWEN_API_KEY.substring(0, 8)}...`));
+    if (existingKey && existingKey !== 'your_qwen_api_key_here') {
+      console.log(chalk.green(`✓ Already configured: ${existingKey.substring(0, 8)}...`));
       const { change } = await prompts({
         type: 'confirm',
         name: 'change',
@@ -124,7 +124,7 @@ class APIKeySetup {
         initial: false
       });
       
-      if (!change) return;
+      if (!change) return existingKey;
     }
     
     console.log(chalk.gray('\nTo get a Qwen API key:'));
@@ -164,103 +164,36 @@ class APIKeySetup {
         });
         
         if (apiKey) {
-          config.QWEN_API_KEY = apiKey;
           console.log(chalk.green('✅ Qwen API key saved!'));
+          return apiKey;
         }
         break;
       case 'skip':
         console.log(chalk.yellow('Skipped Qwen API setup.'));
         break;
     }
-  }
-
-  /**
-   * Create a new .env file
-   */
-  createEnvFile() {
-    const envContent = `# Hybrid AI CLI Configuration
-
-# Gemini API Key (required for remote Gemini access)
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Qwen API Key (required for remote Qwen access)
-QWEN_API_KEY=your_qwen_api_key_here
-
-# Local AI Settings
-LOCAL_AI_PROVIDER=ollama
-LOCAL_AI_BASE_URL=http://localhost:11434
-
-# Default Models
-DEFAULT_LOCAL_MODEL=smollm2:1.7b
-DEFAULT_REMOTE_MODEL=gemini-pro
-
-# Complexity Threshold (characters)
-COMPLEXITY_THRESHOLD=100
-`;
     
-    fs.writeFileSync(this.configPath, envContent);
-    console.log(chalk.green('✅ Created new .env configuration file'));
-  }
-
-  /**
-   * Load configuration from .env file
-   */
-  loadConfig() {
-    const config = {};
-    
-    if (fs.existsSync(this.configPath)) {
-      const envContent = fs.readFileSync(this.configPath, 'utf8');
-      const lines = envContent.split('\n');
-      
-      lines.forEach(line => {
-        if (line.trim() && !line.startsWith('#')) {
-          const [key, value] = line.split('=');
-          if (key && value !== undefined) {
-            config[key.trim()] = value.trim();
-          }
-        }
-      });
-    }
-    
-    return config;
-  }
-
-  /**
-   * Save configuration to .env file
-   */
-  saveConfig(config) {
-    let envContent = `# Hybrid AI CLI Configuration
-
-# Gemini API Key (required for remote Gemini access)
-GEMINI_API_KEY=${config.GEMINI_API_KEY || 'your_gemini_api_key_here'}
-
-# Qwen API Key (required for remote Qwen access)
-QWEN_API_KEY=${config.QWEN_API_KEY || 'your_qwen_api_key_here'}
-
-# Local AI Settings
-LOCAL_AI_PROVIDER=ollama
-LOCAL_AI_BASE_URL=http://localhost:11434
-
-# Default Models
-DEFAULT_LOCAL_MODEL=smollm2:1.7b
-DEFAULT_REMOTE_MODEL=gemini-pro
-
-# Complexity Threshold (characters)
-COMPLEXITY_THRESHOLD=100
-`;
-    
-    fs.writeFileSync(this.configPath, envContent);
+    return existingKey;
   }
 
   /**
    * Check if API keys are configured
    */
   areKeysConfigured() {
-    const config = this.loadConfig();
+    const keys = this.keyManager.getAPIKeys();
+    const validity = this.keyManager.checkKeyValidity(keys);
+    
     return {
-      gemini: !!(config.GEMINI_API_KEY && config.GEMINI_API_KEY !== 'your_gemini_api_key_here'),
-      qwen: !!(config.QWEN_API_KEY && config.QWEN_API_KEY !== 'your_qwen_api_key_here')
+      gemini: validity.gemini,
+      qwen: validity.qwen
     };
+  }
+  
+  /**
+   * Get configured API keys
+   */
+  getKeys() {
+    return this.keyManager.getAPIKeys();
   }
 }
 

@@ -20,6 +20,8 @@ program
   .option('-m, --model <model>', 'Specify model to use')
   .option('-g, --gui', 'Start the GUI interface')
   .option('-s, --setup', 'Setup API keys for remote services')
+  .option('--gemini-key <key>', 'Specify Gemini API key directly')
+  .option('--qwen-key <key>', 'Specify Qwen API key directly')
   .action(async (task, options) => {
     // If setup option is selected, start the API key setup
     if (options.setup) {

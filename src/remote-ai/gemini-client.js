@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const config = require('../config');
+const APIKeyManager = require('../utils/api-key-manager');
 
 /**
  * Execute a task using Gemini AI
@@ -9,12 +10,18 @@ const config = require('../config');
  * @returns {string} - The result from Gemini
  */
 async function executeGeminiTask(task, model) {
-  if (!config.gemini.apiKey) {
-    throw new Error('Gemini API key is not configured. Please set GEMINI_API_KEY in your .env file.');
+  // Get API key using the manager
+  const keyManager = new APIKeyManager();
+  const keys = keyManager.getAPIKeys();
+  
+  const apiKey = keys.gemini || config.gemini.apiKey;
+  
+  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+    throw new Error('Gemini API key is not configured. Please set GEMINI_API_KEY in your .env file or use --gemini-key option.');
   }
   
   try {
-    const genAI = new GoogleGenerativeAI(config.gemini.apiKey);
+    const genAI = new GoogleGenerativeAI(apiKey);
     const geminiModel = genAI.getGenerativeModel({ model: model || 'gemini-pro' });
     
     const result = await geminiModel.generateContent(task);
@@ -32,8 +39,14 @@ async function executeGeminiTask(task, model) {
  * @returns {string} - The result from Qwen
  */
 async function executeQwenTask(task, model) {
-  if (!config.qwen.apiKey) {
-    throw new Error('Qwen API key is not configured. Please set QWEN_API_KEY in your .env file.');
+  // Get API key using the manager
+  const keyManager = new APIKeyManager();
+  const keys = keyManager.getAPIKeys();
+  
+  const apiKey = keys.qwen || config.qwen.apiKey;
+  
+  if (!apiKey || apiKey === 'your_qwen_api_key_here') {
+    throw new Error('Qwen API key is not configured. Please set QWEN_API_KEY in your .env file or use --qwen-key option.');
   }
   
   try {
@@ -51,7 +64,7 @@ async function executeQwenTask(task, model) {
       },
       {
         headers: {
-          'Authorization': `Bearer ${config.qwen.apiKey}`,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
           'X-DashScope-SSE': 'enable'
         }
