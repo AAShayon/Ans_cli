@@ -3,8 +3,13 @@ const ora = require('ora');
 const { analyzeComplexity } = require('./hybrid-engine/complexity-analyzer');
 const { makeDecision } = require('./hybrid-engine/decision-engine');
 const { executeTask } = require('./hybrid-engine/task-orchestrator');
+const { displayMotivationalSpeech } = require('./utils/speech-display');
 
 async function executeHybridTask(task, options) {
+  // Display initial motivational message
+  console.log(chalk.blue.bold('\n🌟 Empowering Developers with AI Technology 🌟\n'));
+  displayMotivationalSpeech('general');
+  
   const spinner = ora({
     text: 'Analyzing task complexity...',
     spinner: 'clock'
@@ -31,6 +36,10 @@ async function executeHybridTask(task, options) {
     const result = await executeTask(task, decision);
     
     spinner.succeed(chalk.green('Task completed successfully!'));
+    
+    // Display completion motivational message
+    console.log(chalk.blue.bold('\n🎉 Technology Empowerment Complete! 🎉\n'));
+    displayMotivationalSpeech('completion');
     
     // Display result
     console.log('\n' + chalk.bold('Result:'));
