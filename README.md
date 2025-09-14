@@ -1,11 +1,12 @@
-# Hybrid AI CLI/GUI Tool - Professor-Student-Mentor Model
+# Hybrid AI CLI/GUI Tool - Professional Senior Developer Workflow
 
-A sophisticated AI tool that implements a complete educational workflow:
-- **Professor (Gemini/Qwen)**: Creates plans, provides expert instructions, and evaluates code quality
-- **Student (Ollama)**: Implements solutions and applies improvements
-- **Mentor (Gemini/Qwen)**: Tests code, identifies issues, and provides detailed feedback
+A sophisticated AI tool that implements a complete professional software development workflow:
+- **Senior Developers (Gemini/Qwen)**: Create architecture, specifications, and conduct code reviews
+- **Implementation Team (Ollama Models)**: Implement solutions using specialized models for each task type
+- **Testing Framework (Sprite MCP)**: Automatically test code quality and functionality
+- **Continuous Improvement**: Iterative refinement based on professional feedback
 
-This approach mimics a complete university learning cycle where students receive expert guidance, implement solutions, get evaluated, and then improve based on feedback.
+This approach mimics a complete professional software development process with specialized roles and automated testing.
 
 Users can choose between:
 - **CLI Mode**: Command-line interface for power users
@@ -13,51 +14,55 @@ Users can choose between:
 
 ## Features
 
-- **Complete Educational Workflow**: Plan → Implement → Test → Evaluate → Improve
-- **Multi-AI Collaboration**: Three distinct AI roles working together
-- **Automated Code Validation**: Built-in testing and validation
+- **Professional Development Workflow**: Architecture → Implementation → Testing → Review → Improvement
+- **Role-Based AI Processing**: Specialized AI for each development role
+- **Dynamic Model Selection**: Chooses optimal local models based on task type
+- **Automated Testing**: Integration with Sprite MCP testing framework
 - **Privacy First**: Sensitive data stays local during implementation
 - **Resource Efficient**: Works on limited hardware
 - **Multi-Model Support**: Gemini, Qwen, and Ollama integration
 - **Task Orchestration**: Complex tasks broken down into manageable steps
 - **Dual Interface**: Both CLI and GUI options available
 
-## The Professor-Student-Mentor Workflow
+## The Professional Senior Developer Workflow
 
-When you use the hybrid mode for complex tasks, the tool follows this complete cycle:
+When you use the hybrid mode for complex tasks, the tool follows this complete professional cycle:
 
-1. **🎓 Professor Phase**: 
-   - Creates a comprehensive plan and detailed instructions
-   - Provides expert-level guidance and best practices
+1. **🏢 Senior Developer Phase**: 
+   - Creates comprehensive architecture and specifications
+   - Provides technology stack recommendations
+   - Defines best practices and design patterns
 
-2. **👨‍🎓 Student Phase**: 
-   - Implements the solution based on the professor's instructions
-   - Works locally to maintain privacy and efficiency
+2. **⌨️ Implementation Phase**: 
+   - Professional developers (local AI) implement solutions
+   - Uses specialized models based on task type
+   - Maintains privacy and efficiency locally
 
 3. **🧪 Automated Testing**: 
-   - Runs basic syntax and validation checks
+   - Runs comprehensive tests using Sprite MCP framework
+   - Validates code quality and functionality
    - Identifies immediate issues
 
-4. **📊 Mentor Evaluation**: 
-   - Conducts thorough code quality assessment
-   - Identifies issues, bugs, and improvement areas
+4. **🧐 Code Review Phase**: 
+   - Senior developers conduct thorough code reviews
+   - Identify issues, bugs, and improvement areas
+   - Provide detailed, professional feedback
 
-5. **🔍 Professor Feedback**: 
-   - Analyzes evaluation results
-   - Provides targeted improvement instructions
+5. **🔧 Improvement Implementation**: 
+   - Developers implement all suggested improvements
+   - Produces final, production-ready code
 
-6. **🛠 Student Implementation**: 
-   - Implements all suggested improvements
-   - Produces final, high-quality code
-
-7. **🏁 Final Validation**: 
+6. **🏁 Final Validation**: 
    - Verifies improvements were successfully implemented
+   - Ensures code meets professional standards
 
 ## Prerequisites
 
 - Node.js (v14 or higher)
 - npm (usually comes with Node.js)
 - Git (for cloning the repository)
+- Ollama (for local AI processing)
+- Sprite MCP (for automated testing - optional but recommended)
 
 ## Installation
 
@@ -77,6 +82,7 @@ When you use the hybrid mode for complex tasks, the tool follows this complete c
 
 3. Follow the prompts to:
    - Install Ollama (for local AI processing)
+   - Install Sprite MCP (for testing - optional)
    - Get API keys for remote services (Gemini, Qwen)
    - Configure the tool
 
@@ -98,7 +104,13 @@ When you use the hybrid mode for complex tasks, the tool follows this complete c
    curl -fsSL https://ollama.com/install.sh | sh
    ```
 
-4. Get API keys:
+4. Install Sprite MCP for testing (optional):
+   ```bash
+   # Check Sprite MCP documentation for installation instructions
+   # https://github.com/sprite-mcp/sprite
+   ```
+
+5. Get API keys:
    - **Gemini (Google)**: 
      1. Go to https://aistudio.google.com/
      2. Sign in with your Google account
@@ -108,13 +120,13 @@ When you use the hybrid mode for complex tasks, the tool follows this complete c
      2. Sign up for an account
      3. Get your API key
 
-5. Configure the tool:
+6. Configure the tool:
    ```bash
    cp .env.example .env
    nano .env  # Add your API keys here
    ```
 
-6. Link the CLI tool:
+7. Link the CLI tool:
    ```bash
    npm link
    ```
@@ -124,16 +136,16 @@ When you use the hybrid mode for complex tasks, the tool follows this complete c
 ### CLI Mode
 
 ```bash
-# Basic usage (student works independently)
+# Basic usage (developer works independently)
 hybrid-ai "What is a variable in JavaScript?"
 
-# Complex task (complete professor-student-mentor workflow)
+# Complex task (complete professional development workflow)
 hybrid-ai --complexity high "Create a complete React authentication system"
 
-# Force direct professor consultation
-hybrid-ai --remote "Explain quantum computing in simple terms"
+# Force senior developer consultation
+hybrid-ai --remote "Design a microservices architecture for e-commerce"
 
-# Force student-only work
+# Force local implementation only
 hybrid-ai --local "Generate a for loop in Python"
 ```
 
@@ -151,60 +163,67 @@ node src/gui.js
 
 ## Roles in the System
 
-### 🎓 Professor (Remote AI - Gemini/Qwen)
-- **Role**: Expert instructor and planner
+### 🏢 Senior Developer (Remote AI - Gemini/Qwen)
+- **Role**: Architect and reviewer
 - **Responsibilities**:
-  - Create comprehensive implementation plans
-  - Provide detailed, step-by-step instructions
+  - Create comprehensive architecture and specifications
+  - Provide technology stack recommendations
+  - Conduct thorough code reviews
   - Share best practices and expert insights
-  - Analyze code evaluations and provide improvement instructions
-  - Guide the student through complex problem-solving
+  - Guide the development process
 
-### 👨‍🎓 Student (Local AI - Ollama)
-- **Role**: Implementation specialist
+### ⌨️ Implementation Team (Local AI - Ollama)
+- **Role**: Professional developers
 - **Responsibilities**:
-  - Implement solutions based on professor's instructions
-  - Apply improvements suggested by the professor
+  - Implement solutions based on senior developer specifications
+  - Use specialized models for different task types
   - Work locally to maintain privacy and efficiency
-  - Show work clearly with explanations
+  - Apply improvements suggested by senior developers
 
-### 📊 Mentor (Remote AI - Gemini/Qwen)
-- **Role**: Quality assurance and evaluator
+### 🧪 Testing Framework (Sprite MCP)
+- **Role**: Quality assurance
 - **Responsibilities**:
-  - Conduct thorough code quality assessments
-  - Identify bugs, issues, and improvement areas
-  - Provide detailed, constructive feedback
-  - Evaluate adherence to best practices
+  - Run comprehensive automated tests
+  - Validate code quality and functionality
+  - Identify bugs and performance issues
+  - Provide detailed test reports
 
-### 🧪 Automated Testing
-- **Role**: Immediate quality checker
+### 🧠 Model Selection System
+- **Role**: Optimization specialist
 - **Responsibilities**:
-  - Run basic syntax validation
-  - Perform automated testing
-  - Identify immediate issues
-  - Provide quick feedback
+  - Choose optimal local models based on task type
+  - Select implementation models for coding tasks
+  - Choose improvement models for code refinement
+  - Balance performance and accuracy
 
 ## Models Used
 
-- **Student**: Ollama with SmolLM2, CodeGemma, TinyLlama
-- **Professor/Mentor**: Gemini (Google), Qwen (Alibaba Cloud)
+### Senior Developers (Remote):
+- Gemini (Google)
+- Qwen (Alibaba Cloud)
+
+### Implementation Team (Local):
+- CodeLlama (7B) - For Flutter/Dart and complex coding tasks
+- SmolLM2 (1.7B) - For JavaScript, PHP, and general tasks
+- CodeGemma (2B) - For Python and code analysis tasks
+- TinyLlama (1.1B) - For simple tasks and quick responses
 
 ## Configuration
 
 The `.env` file contains all configuration options:
 
 ```env
-# Professor/Mentor API Keys
+# Senior Developer API Keys
 GEMINI_API_KEY=your_gemini_api_key_here
 QWEN_API_KEY=your_qwen_api_key_here
 
-# Student Settings
+# Implementation Team Settings
 LOCAL_AI_PROVIDER=ollama
 LOCAL_AI_BASE_URL=http://localhost:11434
 
 # Default Models
-DEFAULT_STUDENT_MODEL=smollm2:1.7b
-DEFAULT_PROFESSOR_MODEL=gemini-pro
+DEFAULT_IMPLEMENTATION_MODEL=smollm2:1.7b
+DEFAULT_SENIOR_MODEL=gemini-pro
 
 # Complexity Threshold (characters)
 COMPLEXITY_THRESHOLD=100
@@ -214,15 +233,25 @@ COMPLEXITY_THRESHOLD=100
 
 When you ask the tool to "Create a React login form with validation":
 
-1. **Professor** creates a detailed plan covering component structure, validation logic, and best practices
-2. **Student** implements the React component based on the plan
-3. **Automated Testing** checks for syntax errors
-4. **Mentor** evaluates the code quality, identifying potential improvements
-5. **Professor** provides specific feedback on how to improve the implementation
-6. **Student** implements the suggested improvements
-7. **Final Validation** confirms all improvements were successfully applied
+1. **Senior Developer** creates architecture with component structure, validation logic, and best practices
+2. **Implementation Team** builds the React component using specialized JavaScript models
+3. **Sprite MCP** runs automated tests to validate functionality
+4. **Senior Developer** reviews the code quality and provides professional feedback
+5. **Implementation Team** implements all suggested improvements
+6. **Final Validation** confirms all improvements were successfully applied
 
-The result includes all phases of the workflow, giving you both expert guidance and a high-quality implementation.
+The result includes all phases of the professional development workflow, giving you both expert architecture and production-ready implementation.
+
+## Task Type Detection
+
+The tool automatically detects task types and selects appropriate models:
+
+- **Flutter/Dart**: Uses CodeLlama for UI components
+- **JavaScript/React**: Uses SmolLM2 for frontend development
+- **Python**: Uses CodeLlama for backend development
+- **Java**: Uses CodeLlama for enterprise applications
+- **PHP/Laravel**: Uses SmolLM2 for web development
+- **General**: Uses balanced models for mixed tasks
 
 ## Troubleshooting
 
@@ -237,6 +266,10 @@ The result includes all phases of the workflow, giving you both expert guidance 
 
 3. **"Command not found: hybrid-ai"**:
    - Make sure you ran `npm link` during installation
+
+4. **"Sprite MCP not available"**:
+   - Install Sprite MCP framework for comprehensive testing
+   - Tool will work without it but with limited testing capabilities
 
 ### Getting Help
 

@@ -1,9 +1,10 @@
 const { executeLocalTask } = require('../local-ai/ollama-client');
 const { executeRemoteTask } = require('../remote-ai/gemini-client');
-const { validateCode } = require('../utils/code-validator');
+const { selectOptimalModel } = require('../local-ai/model-selector');
+const { runSpriteMCPTests } = require('../testing/sprite-mcp');
 
 /**
- * Execute a task using the advanced professor-student-mentor workflow
+ * Execute a task using the professional senior developer workflow
  * @param {string} task - The task to execute
  * @param {object} decision - The decision on how to process the task
  * @returns {string} - The result of the task execution
@@ -11,165 +12,138 @@ const { validateCode } = require('../utils/code-validator');
 async function executeTask(task, decision) {
   switch (decision.approach) {
     case 'local':
-      // Student working independently on simple tasks
-      return await executeLocalTask(task, decision.model);
+      // Senior developer working independently on simple tasks
+      const localModel = selectOptimalModel(task, 'local');
+      return await executeLocalTask(task, localModel);
       
     case 'remote':
-      // Direct consultation with professor for theoretical questions
+      // Consulting with senior architect for complex design decisions
       return await executeRemoteTask(task, decision.model);
       
     case 'hybrid':
-      // Advanced professor-student-mentor workflow:
-      // 1. Professor creates detailed plan and instructions
-      // 2. Student implements the code
-      // 3. Automated testing and validation
-      // 4. Mentor evaluates code quality
-      // 5. Professor provides targeted feedback
-      // 6. Student implements improvements
+      // Professional development workflow:
+      // 1. Senior Developer (Gemini/Qwen) creates architecture and specifications
+      // 2. Code Implementation by local models (selected based on task)
+      // 3. Automated testing with Sprite MCP
+      // 4. Senior Developer reviews and provides feedback
+      // 5. Implementation improvements
+      // 6. Final testing and validation
       
-      console.log("🎓 Professor is creating a detailed plan...");
+      console.log("👨‍💻 Senior Developer is creating architecture and specifications...");
       
-      // Step 1: Professor creates plan and instructions
-      const professorsPlan = await executeRemoteTask(
-        `As an expert professor, create a comprehensive plan for this task:
+      // Step 1: Senior Developer creates architecture and specifications
+      const architectureSpec = await executeRemoteTask(
+        `As a senior software architect, create a comprehensive architecture and specifications for this task:
          
          Task: ${task}
          
          Provide:
-         1. Implementation approach and architecture
-         2. Detailed step-by-step coding instructions
-         3. Best practices and design patterns to follow
-         4. Common pitfalls and how to avoid them
-         5. Expected outcomes and success criteria
+         1. System architecture overview
+         2. Technology stack recommendations
+         3. Detailed implementation specifications
+         4. Code structure and organization
+         5. Best practices and design patterns to apply
+         6. Security considerations
+         7. Performance requirements
+         8. Testing strategies
          
-         Be extremely thorough and specific, as if you're mentoring a student through the entire process.`,
+         Be thorough and professional, as this will guide the implementation.`, 
         decision.model
       );
       
-      console.log("👨‍🎓 Student is implementing the solution...");
+      console.log("⌨️  Code Implementation in progress...");
       
-      // Step 2: Student implements the code based on professor's instructions
-      const studentsImplementation = await executeLocalTask(
-        `You are a diligent student following your professor's comprehensive plan. 
-         Implement this solution step by step:
+      // Step 2: Code Implementation by local models (selected based on task)
+      const implementationModel = selectOptimalModel(task, 'implementation');
+      const initialImplementation = await executeLocalTask(
+        `You are a professional developer implementing a solution based on senior architect specifications.
          
-         Professor's Plan: ${professorsPlan}
+         Architecture Specifications: ${architectureSpec}
          
          Original Task: ${task}
          
-         Write clean, well-structured code that follows the professor's guidance exactly.
-         Include comments explaining your implementation decisions.`,
-        decision.localModel
+         Implement a professional, production-ready solution that follows all specifications.
+         Write clean, well-documented, and maintainable code.`, 
+        implementationModel
       );
       
-      console.log("🧪 Running automated tests...");
+      console.log("🧪 Running automated tests with Sprite MCP...");
       
-      // Step 3: Automated testing and validation
-      // Extract language from task or implementation
-      const language = detectLanguage(task, studentsImplementation);
-      const validationResults = await validateCode(studentsImplementation, language);
+      // Step 3: Automated testing with Sprite MCP
+      const testResults = await runSpriteMCPTests(initialImplementation, task);
       
-      console.log("📊 Mentor is evaluating the code...");
+      console.log("🧐 Senior Developer is reviewing code and test results...");
       
-      // Step 4: Mentor evaluates the code quality
-      const codeEvaluation = await executeRemoteTask(
-        `As a code mentor, conduct a thorough evaluation of this implementation:
+      // Step 4: Senior Developer reviews and provides feedback
+      const codeReview = await executeRemoteTask(
+        `As a senior code reviewer, conduct a thorough review of this implementation:
          
          Original Task: ${task}
-         Professor's Plan: ${professorsPlan}
-         Student's Implementation: ${studentsImplementation}
-         Automated Validation Results: ${JSON.stringify(validationResults)}
+         Architecture Specifications: ${architectureSpec}
+         Implementation: ${initialImplementation}
+         Test Results: ${JSON.stringify(testResults)}
          
-         Provide a comprehensive evaluation covering:
-         1. Code correctness and functionality
-         2. Adherence to best practices and design patterns
-         3. Code readability and maintainability
-         4. Performance considerations
-         5. Security implications
+         Provide a professional code review covering:
+         1. Code quality and maintainability
+         2. Adherence to specifications
+         3. Best practices and design patterns
+         4. Performance optimizations
+         5. Security considerations
          6. Areas for improvement
          7. Potential bugs or issues
          8. Overall quality score (1-10)
          
-         Be specific, constructive, and detailed in your feedback.`,
+         Be detailed and constructive in your feedback.`, 
         decision.model
       );
       
-      console.log("🔍 Professor is analyzing results and providing feedback...");
+      console.log("🔧 Implementing improvements based on review...");
       
-      // Step 5: Professor analyzes evaluation and provides improvement instructions
-      const improvementInstructions = await executeRemoteTask(
-        `As an expert professor, analyze this code evaluation and provide targeted improvement instructions:
-         
-         Student's Implementation: ${studentsImplementation}
-         Automated Validation Results: ${JSON.stringify(validationResults)}
-         Mentor's Evaluation: ${codeEvaluation}
-         
-         Provide detailed, actionable instructions on how to:
-         1. Fix identified issues and bugs
-         2. Improve code quality and maintainability
-         3. Optimize performance
-         4. Enhance security
-         5. Follow better practices and patterns
-         6. Meet the original task requirements more effectively
-         
-         Prioritize the most critical improvements first.
-         Be extremely specific about what changes to make, where to make them, and why.`,
-        decision.model
-      );
-      
-      console.log("🛠 Student is implementing improvements...");
-      
-      // Step 6: Student implements improvements based on professor's feedback
+      // Step 5: Implementation improvements
+      const improvementModel = selectOptimalModel(task, 'improvement');
       const improvedImplementation = await executeLocalTask(
-        `You are a student improving your code based on detailed feedback from your professor.
+        `You are a professional developer improving your code based on senior reviewer feedback.
          
-         Original Implementation: ${studentsImplementation}
-         Automated Validation Results: ${JSON.stringify(validationResults)}
-         Mentor's Evaluation: ${codeEvaluation}
-         Professor's Improvement Instructions: ${improvementInstructions}
+         Original Implementation: ${initialImplementation}
+         Test Results: ${JSON.stringify(testResults)}
+         Code Review: ${codeReview}
          
-         Implement all the suggested improvements precisely.
-         Show both the original code and your improvements clearly.
-         Explain your reasoning for each change.`,
-        decision.localModel
+         Implement all suggested improvements professionally.
+         Show both the original code and your improvements clearly.`, 
+        improvementModel
       );
       
-      // Step 7: Final validation of improved code
-      const finalValidation = await validateCode(improvedImplementation, language);
+      console.log("🏁 Final testing and validation...");
       
-      return `🎓 Professor's Comprehensive Plan:\\n${professorsPlan}\\n\\n\\n              👨‍🎓 Student's Initial Implementation:\\n${studentsImplementation}\\n\\n\\n              🧪 Automated Validation Results:\\n${JSON.stringify(validationResults, null, 2)}\\n\\n\\n              📊 Mentor's Detailed Evaluation:\\n${codeEvaluation}\\n\\n\\n              🔍 Professor's Targeted Improvement Instructions:\\n${improvementInstructions}\\n\\n\\n              ✅ Student's Final Improved Implementation:\\n${improvedImplementation}\\n\\n\\n              🏁 Final Validation:\\n${JSON.stringify(finalValidation, null, 2)}`;
+      // Step 6: Final testing and validation
+      const finalTestResults = await runSpriteMCPTests(improvedImplementation, task);
+      
+      return `🏢 Senior Developer Architecture & Specifications:
+${architectureSpec}
+
+              
+              ⌨️  Professional Implementation:
+${initialImplementation}
+
+              
+              🧪 Initial Test Results:
+${JSON.stringify(testResults, null, 2)}
+
+              
+              🧐 Senior Developer Code Review:
+${codeReview}
+
+              
+              ✅ Improved Implementation:
+${improvedImplementation}
+
+              
+              🏁 Final Test Results:
+${JSON.stringify(finalTestResults, null, 2)}`;
       
     default:
-      throw new Error(`Unknown approach: ${decision.approach}`);
+      throw new Error(\`Unknown approach: \${decision.approach}\`);
   }
-}
-
-/**
- * Detect programming language from task or code
- * @param {string} task - The task description
- * @param {string} code - The code implementation
- * @returns {string} - Detected programming language
- */
-function detectLanguage(task, code) {
-  const taskLower = task.toLowerCase();
-  const codeLower = code.toLowerCase();
-  
-  // Check task for language hints
-  if (taskLower.includes('javascript') || taskLower.includes('js') || codeLower.includes('function')) {
-    return 'javascript';
-  }
-  if (taskLower.includes('python') || taskLower.includes('py') || codeLower.includes('def ')) {
-    return 'python';
-  }
-  if (taskLower.includes('java') || codeLower.includes('public class')) {
-    return 'java';
-  }
-  if (taskLower.includes('flutter') || taskLower.includes('dart') || codeLower.includes('widget')) {
-    return 'dart';
-  }
-  
-  // Default to JavaScript
-  return 'javascript';
 }
 
 module.exports = { executeTask };
