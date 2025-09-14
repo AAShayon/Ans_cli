@@ -6,8 +6,9 @@ A sophisticated AI tool that implements a complete professional software develop
 - **Testing Framework (Sprite MCP)**: Automatically test code quality and functionality
 - **Continuous Improvement**: Iterative refinement based on professional feedback
 - **Motivational Guidance**: Inspirational messages about technology freedom throughout the process
+- **Interactive API Setup**: Guided setup for remote AI services
 
-This approach mimics a complete professional software development process with specialized roles, automated testing, and inspirational guidance.
+This approach mimics a complete professional software development process with specialized roles, automated testing, inspirational guidance, and easy API configuration.
 
 Users can choose between:
 - **CLI Mode**: Command-line interface for power users
@@ -23,6 +24,7 @@ Users can choose between:
 - **Resource Efficient**: Works on limited hardware
 - **Multi-Model Support**: Gemini, Qwen, and Ollama integration
 - **Motivational Guidance**: Inspirational messages about technology freedom
+- **Interactive API Setup**: Guided configuration for remote services
 - **Task Orchestration**: Complex tasks broken down into manageable steps
 - **Dual Interface**: Both CLI and GUI options available
 
@@ -71,6 +73,33 @@ Throughout the development process, you'll receive inspirational messages about 
 - **Completion**: Inspirational messages about the future of tech
 
 These messages remind us that technology should be free, accessible, and empowering for all developers.
+
+## Interactive API Key Setup
+
+Setting up API keys for remote AI services is now easier than ever with our interactive setup:
+
+```bash
+hybrid-ai --setup
+```
+
+This command will guide you through:
+
+1. **Gemini API Setup**:
+   - Option to open https://aistudio.google.com/ in your browser
+   - Step-by-step instructions for creating an API key
+   - Secure terminal-based key entry
+
+2. **Qwen API Setup**:
+   - Option to open https://help.aliyun.com/product/148140.html in your browser
+   - Guidance for creating an Alibaba Cloud account
+   - Secure terminal-based key entry
+
+3. **Configuration Management**:
+   - Automatic .env file creation and management
+   - Secure storage of API keys
+   - Option to update existing keys
+
+The setup process will automatically open the appropriate websites in your browser and guide you through the key creation process. You can also choose to enter keys manually if you prefer.
 
 ## Prerequisites
 
@@ -126,23 +155,18 @@ These messages remind us that technology should be free, accessible, and empower
    # https://github.com/sprite-mcp/sprite
    ```
 
-5. Get API keys:
-   - **Gemini (Google)**: 
-     1. Go to https://aistudio.google.com/
-     2. Sign in with your Google account
-     3. Create an API key
-   - **Qwen (Alibaba Cloud)**:
-     1. Go to https://help.aliyun.com/product/148140.html
-     2. Sign up for an account
-     3. Get your API key
+5. Configure API keys using interactive setup:
+   ```bash
+   hybrid-ai --setup
+   ```
 
-6. Configure the tool:
+   Or manually configure the tool:
    ```bash
    cp .env.example .env
    nano .env  # Add your API keys here
    ```
 
-7. Link the CLI tool:
+6. Link the CLI tool:
    ```bash
    npm link
    ```
@@ -163,6 +187,9 @@ hybrid-ai --remote "Design a microservices architecture for e-commerce"
 
 # Force local implementation only
 hybrid-ai --local "Generate a for loop in Python"
+
+# Interactive API key setup
+hybrid-ai --setup
 ```
 
 ### GUI Mode
@@ -211,6 +238,14 @@ node src/gui.js
   - Provide context-appropriate motivational thoughts
   - Remind users of the importance of open technology
   - Encourage innovation without boundaries
+
+### 🔐 API Key Management System
+- **Role**: Secure configuration management
+- **Responsibilities**:
+  - Interactive setup for remote AI services
+  - Browser automation for key creation
+  - Secure terminal-based key entry
+  - Configuration file management
 
 ### 🧠 Model Selection System
 - **Role**: Optimization specialist
@@ -291,7 +326,8 @@ The tool automatically detects task types and selects appropriate models:
    - Start Ollama with: `ollama serve`
 
 2. **"API key not configured"**:
-   - Make sure you've added your API keys to the `.env` file
+   - Run `hybrid-ai --setup` for interactive configuration
+   - Or manually add your API keys to the `.env` file
 
 3. **"Command not found: hybrid-ai"**:
    - Make sure you ran `npm link` during installation

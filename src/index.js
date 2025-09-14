@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const { executeHybridTask } = require('./cli');
 const { spawn } = require('child_process');
 const path = require('path');
+const APIKeySetup = require('./utils/api-key-setup');
 
 // CLI Program Definition
 program
@@ -18,7 +19,16 @@ program
   .option('-l, --local', 'Force local processing')
   .option('-m, --model <model>', 'Specify model to use')
   .option('-g, --gui', 'Start the GUI interface')
+  .option('-s, --setup', 'Setup API keys for remote services')
   .action(async (task, options) => {
+    // If setup option is selected, start the API key setup
+    if (options.setup) {
+      console.log(chalk.blue('Starting API Key Setup...'));
+      const setup = new APIKeySetup();
+      await setup.startSetup();
+      return;
+    }
+    
     // If GUI option is selected, start the GUI
     if (options.gui) {
       console.log(chalk.blue('Starting Hybrid AI GUI...'));
