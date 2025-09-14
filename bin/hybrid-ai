@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+// This is the CLI entry point
+require('../src/index.js');

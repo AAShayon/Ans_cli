@@ -1,0 +1,38 @@
+{
+  "name": "hybrid-ai-cli",
+  "version": "1.0.0",
+  "description": "A hybrid AI CLI/GUI tool that combines local and remote AI models",
+  "main": "src/index.js",
+  "bin": {
+    "hybrid-ai": "./bin/hybrid-ai"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "gui": "node src/gui.js",
+    "dev": "nodemon src/index.js",
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "ai",
+    "cli",
+    "gui",
+    "hybrid",
+    "ollama",
+    "gemini",
+    "qwen"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.1.3",
+    "axios": "^1.6.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

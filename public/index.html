@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid AI CLI/GUI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 100px;
+            font-family: inherit;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .loading {
+            text-align: center;
+            color: #7f8c8d;
+        }
+        .error {
+            color: #e74c3c;
+            background-color: #fadbd8;
+        }
+        .success {
+            color: #27ae60;
+            background-color: #d5f5e3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hybrid AI CLI/GUI</h1>
+        <p style="text-align: center;">Combine the power of local and remote AI models</p>
+        
+        <div class="input-group">
+            <label for="task">Enter your task:</label>
+            <textarea id="task" placeholder="e.g., Generate a Flutter login widget, Explain how React hooks work, etc."></textarea>
+        </div>
+        
+        <div class="input-group">
+            <label for="complexity">Task Complexity:</label>
+            <select id="complexity">
+                <option value="auto">Auto-detect</option>
+                <option value="low">Low (Simple queries)</option>
+                <option value="medium">Medium (Moderate tasks)</option>
+                <option value="high">High (Complex tasks)</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="processing">Processing Method:</label>
+            <select id="processing">
+                <option value="auto">Auto-select (Hybrid)</option>
+                <option value="local">Local Only</option>
+                <option value="remote">Remote Only</option>
+            </select>
+        </div>
+        
+        <button id="process-btn">Process Task</button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById('process-btn').addEventListener('click', async () => {
+            const task = document.getElementById('task').value.trim();
+            const complexity = document.getElementById('complexity').value;
+            const processing = document.getElementById('processing').value;
+            
+            if (!task) {
+                showError('Please enter a task');
+                return;
+            }
+            
+            const button = document.getElementById('process-btn');
+            const resultDiv = document.getElementById('result');
+            
+            // Disable button and show loading
+            button.disabled = true;
+            button.textContent = 'Processing...';
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        task: task,
+                        options: {
+                            complexity: complexity,
+                            processing: processing
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult(data.result, 'success');
+                } else {
+                    showError(data.error);
+                }
+            } catch (error) {
+                showError('Failed to process task: ' + error.message);
+            } finally {
+                // Re-enable button
+                button.disabled = false;
+                button.textContent = 'Process Task';
+            }
+        });
+        
+        function showLoading() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result loading';
+            resultDiv.textContent = 'Processing your request...';
+        }
+        
+        function showResult(content, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = `result ${type}`;
+            resultDiv.textContent = content;
+        }
+        
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result error';
+            resultDiv.textContent = `Error: ${message}`;
+        }
+    </script>
+</body>
+</html>
