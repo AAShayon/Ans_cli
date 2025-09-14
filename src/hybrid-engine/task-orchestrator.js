@@ -10,27 +10,46 @@ const { executeRemoteTask } = require('../remote-ai/gemini-client');
 async function executeTask(task, decision) {
   switch (decision.approach) {
     case 'local':
+      // Student working independently on simple tasks
       return await executeLocalTask(task, decision.model);
       
     case 'remote':
+      // Consulting the professor directly for complex questions
       return await executeRemoteTask(task, decision.model);
       
     case 'hybrid':
-      // For hybrid approach:
-      // 1. Get plan from remote AI
-      // 2. Execute plan locally
-      const plan = await executeRemoteTask(
-        `Create a detailed step-by-step plan to accomplish this task: ${task}. Provide only the plan without implementation.`, 
+      // Professor-student collaboration model:
+      // 1. Professor provides detailed instructions (remote AI creates precise plan)
+      // 2. Student executes the plan (local AI implements the instructions)
+      
+      // Step 1: Ask the professor for expert guidance
+      const professorsInstructions = await executeRemoteTask(
+        `As an expert professor, provide precise, step-by-step instructions to accomplish this task. 
+         Be extremely specific and detailed, as if you're teaching a student exactly what to do. 
+         Task: ${task}
+         
+         Format your response as a clear, actionable plan with specific steps.`,
         decision.model
       );
       
-      // 2. Execute the plan locally
-      const result = await executeLocalTask(
-        `Follow this plan to accomplish the original task. Plan: ${plan}. Original task: ${task}`, 
+      // Step 2: Student executes the professor's instructions
+      const studentsWork = await executeLocalTask(
+        `You are a diligent student following your professor's expert instructions. 
+         Execute this precise plan step by step:
+         
+         Professor's Instructions: ${professorsInstructions}
+         
+         Original Task: ${task}
+         
+         Show your work clearly and follow the professor's guidance exactly.`,
         decision.localModel
       );
       
-      return result;
+      return `Professor's Guidance:
+${professorsInstructions}
+
+Student's Execution:
+${studentsWork}`;
       
     default:
       throw new Error(`Unknown approach: ${decision.approach}`);

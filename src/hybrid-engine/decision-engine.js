@@ -1,19 +1,19 @@
 const config = require('../config');
 
 /**
- * Make a decision on how to process a task
+ * Make a decision on how to process a task using the professor-student model
  * @param {string} task - The task to process
  * @param {string} complexity - Complexity level
  * @param {object} options - CLI options
  * @returns {object} - Decision object with approach and model
  */
 async function makeDecision(task, complexity, options) {
-  // If forced local or remote, respect that
+  // If forced student or professor, respect that
   if (options.local) {
     return {
       approach: 'local',
       model: options.model || config.local.defaultModel,
-      reason: 'Forced local processing'
+      reason: 'Student working independently'
     };
   }
   
@@ -21,40 +21,40 @@ async function makeDecision(task, complexity, options) {
     return {
       approach: 'remote',
       model: options.model || config.remote.defaultModel,
-      reason: 'Forced remote processing'
+      reason: 'Direct professor consultation'
     };
   }
   
-  // Otherwise, decide based on complexity and other factors
+  // Otherwise, decide based on complexity using professor-student approach
   switch (complexity) {
-    case 'low':
+    case 'independent':
       return {
         approach: 'local',
         model: options.model || config.local.defaultModel,
-        reason: 'Low complexity task - processing locally for speed'
+        reason: 'Simple task - student can work independently'
       };
       
-    case 'medium':
+    case 'guided':
       return {
         approach: 'hybrid',
         model: options.model || config.remote.defaultModel,
         localModel: config.local.defaultModel,
-        reason: 'Medium complexity task - using remote guidance with local execution'
+        reason: 'Moderate task - professor provides guidance, student executes'
       };
       
-    case 'high':
+    case 'direct-professor':
       return {
         approach: 'remote',
         model: options.model || config.remote.defaultModel,
-        reason: 'High complexity task - processing remotely for best results'
+        reason: 'Complex task - requires direct professor consultation'
       };
       
     default:
-      // Default to local for simple tasks
+      // Default to student working independently for simple tasks
       return {
         approach: 'local',
         model: options.model || config.local.defaultModel,
-        reason: 'Defaulting to local processing'
+        reason: 'Defaulting to student working independently'
       };
   }
 }

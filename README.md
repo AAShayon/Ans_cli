@@ -1,6 +1,10 @@
 # Hybrid AI CLI/GUI Tool
 
-A powerful tool that combines local and remote AI models for development assistance. This tool uses remote AI (Gemini, Qwen) to guide local models (Ollama) in executing tasks, providing the best of both worlds: privacy and speed of local processing with the intelligence of remote models.
+A powerful tool that combines local and remote AI models following a "professor-student" approach:
+- **Remote AI (Gemini/Qwen)** = Professor (provides expert guidance and precise instructions)
+- **Local AI (Ollama)** = Student (executes the professor's instructions locally)
+
+This approach gives you the best of both worlds: expert-level guidance from remote AI with the privacy and speed of local execution.
 
 Users can choose between:
 - **CLI Mode**: Command-line interface for power users
@@ -8,12 +12,20 @@ Users can choose between:
 
 ## Features
 
-- **Hybrid Intelligence**: Remote AI models guide local execution
-- **Privacy First**: Sensitive data stays local
+- **Professor-Student Model**: Remote AI provides expert instructions, local AI executes them
+- **Privacy First**: Sensitive data stays local during execution
 - **Resource Efficient**: Works on limited hardware
 - **Multi-Model Support**: Gemini, Qwen, and Ollama integration
 - **Task Orchestration**: Complex tasks broken down into manageable steps
 - **Dual Interface**: Both CLI and GUI options available
+
+## How It Works
+
+1. **Simple Tasks**: Student (local AI) handles them independently
+2. **Complex Tasks**: 
+   - Professor (remote AI) provides detailed, expert instructions
+   - Student (local AI) executes those precise instructions
+3. **Result Delivery**: You get both the expert guidance and the executed work
 
 ## Prerequisites
 
@@ -86,20 +98,17 @@ Users can choose between:
 ### CLI Mode
 
 ```bash
-# Basic usage
-hybrid-ai "Generate a Flutter login widget"
+# Basic usage (student works independently)
+hybrid-ai "What is a variable in JavaScript?"
 
-# Specify complexity level
-hybrid-ai --complexity high "Design a complete Laravel API with authentication"
+# Complex task (professor provides guidance, student executes)
+hybrid-ai --complexity high "Create a complete React authentication system"
 
-# Force remote processing
-hybrid-ai --remote "Explain quantum computing concepts"
+# Force professor-direct consultation
+hybrid-ai --remote "Explain quantum computing in simple terms"
 
-# Force local processing
-hybrid-ai --local "What is a for loop in JavaScript?"
-
-# Start GUI mode
-hybrid-ai --gui
+# Force student-only work
+hybrid-ai --local "Generate a for loop in Python"
 ```
 
 ### GUI Mode
@@ -114,37 +123,43 @@ Or directly run the GUI script:
 node src/gui.js
 ```
 
-## How It Works
+## The Professor-Student Approach
 
-1. **Task Analysis**: The system analyzes your request to determine complexity
-2. **Decision Making**: Chooses between local, remote, or hybrid processing
-3. **Remote Guidance**: Complex tasks are sent to remote AI for planning
-4. **Local Execution**: Execution plan is carried out using local resources
-5. **Result Delivery**: Final result is presented to you
+When you use the hybrid mode for complex tasks:
+
+1. **Professor Phase**: Remote AI (Gemini/Qwen) acts as an expert professor, providing:
+   - Detailed step-by-step instructions
+   - Best practices and expert insights
+   - Specific guidance tailored to your task
+
+2. **Student Phase**: Local AI (Ollama) acts as a diligent student, responsible for:
+   - Executing the professor's instructions precisely
+   - Implementing the plan step by step
+   - Showing the work clearly
+
+3. **Result**: You get both the expert guidance and the executed implementation
 
 ## Models Used
 
-- **Local**: Ollama with SmolLM2, CodeGemma, TinyLlama
-- **Remote**: Gemini (Google), Qwen (Alibaba Cloud)
+- **Local (Student)**: Ollama with SmolLM2, CodeGemma, TinyLlama
+- **Remote (Professor)**: Gemini (Google), Qwen (Alibaba Cloud)
 
 ## Configuration
 
 The `.env` file contains all configuration options:
 
 ```env
-# Gemini API Key (required for remote Gemini access)
+# Professor API Keys
 GEMINI_API_KEY=your_gemini_api_key_here
-
-# Qwen API Key (required for remote Qwen access)
 QWEN_API_KEY=your_qwen_api_key_here
 
-# Local AI Settings
+# Student Settings
 LOCAL_AI_PROVIDER=ollama
 LOCAL_AI_BASE_URL=http://localhost:11434
 
 # Default Models
-DEFAULT_LOCAL_MODEL=smollm2:1.7b
-DEFAULT_REMOTE_MODEL=gemini-pro
+DEFAULT_STUDENT_MODEL=smollm2:1.7b
+DEFAULT_PROFESSOR_MODEL=gemini-pro
 
 # Complexity Threshold (characters)
 COMPLEXITY_THRESHOLD=100
