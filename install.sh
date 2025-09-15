@@ -8,6 +8,8 @@ echo "========================================"
 echo "  Hybrid AI CLI/GUI Installation Script  "
 echo "========================================"
 echo
+echo "Built for students and developers - completely free to use!"
+echo
 
 # Check for required tools
 echo "Checking for required tools..."

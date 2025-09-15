@@ -3,9 +3,10 @@ const util = require('util');
 const execPromise = util.promisify(exec);
 const fs = require('fs');
 const path = require('path');
+const TestSpriteMCP = require('./testsprite-mcp');
 
 /**
- * Run tests using Sprite MCP framework
+ * Run tests using Sprite MCP framework or TestSprite MCP as fallback
  * @param {string} code - The code to test
  * @param {string} task - The original task description
  * @returns {object} - Test results
@@ -15,11 +16,11 @@ async function runSpriteMCPTests(code, task) {
     // Check if Sprite MCP is available
     const spriteAvailable = await isSpriteMCPAvailable();
     if (!spriteAvailable) {
-      return {
-        success: false,
-        message: 'Sprite MCP framework not available',
-        suggestion: 'Install Sprite MCP for comprehensive testing'
-      };
+      // Use TestSprite MCP as fallback
+      console.log('Sprite MCP not available, using TestSprite MCP...');
+      const testSprite = new TestSpriteMCP();
+      const language = detectLanguage(task, code);
+      return await testSprite.runTests(code, task, language);
     }
     
     // Create a temporary test directory
@@ -44,11 +45,11 @@ async function runSpriteMCPTests(code, task) {
       exitCode: result.code
     };
   } catch (error) {
-    return {
-      success: false,
-      message: `Test execution failed: ${error.message}`,
-      error: error
-    };
+    // Use TestSprite MCP as fallback
+    console.log('Sprite MCP test execution failed, using TestSprite MCP...');
+    const testSprite = new TestSpriteMCP();
+    const language = detectLanguage(task, code);
+    return await testSprite.runTests(code, task, language);
   }
 }
 

@@ -5,6 +5,7 @@ const { executeOpenRouterTask } = require('../openrouter-client');
 const { selectOptimalModel } = require('../local-ai/model-selector');
 const { runSpriteMCPTests } = require('../testing/sprite-mcp');
 const { startMotivationalSpeeches, stopMotivationalSpeeches } = require('../utils/speech-display');
+const TestSpriteMCP = require('../testing/testsprite-mcp');
 
 /**
  * Execute a task using the professional senior developer workflow

@@ -1,7 +1,7 @@
 {
   "name": "hybrid-ai-cli",
   "version": "1.0.0",
-  "description": "A hybrid AI CLI/GUI tool that combines local and remote AI models",
+  "description": "A hybrid AI CLI/GUI tool that combines local and remote AI models - completely free to use with OpenRouter's free tier models",
   "main": "src/index.js",
   "bin": {
     "hybrid-ai": "./bin/hybrid-ai"
@@ -11,7 +11,8 @@
     "gui": "node src/gui.js",
     "setup": "node src/setup.js",
     "dev": "nodemon src/index.js",
-    "test": "node test/test.js"
+    "test": "node test/test.js",
+    "test-implementation": "node test/test-implementation.js"
   },
   "keywords": [
     "ai",

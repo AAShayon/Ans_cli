@@ -7,6 +7,10 @@ const APIKeyManager = require('./utils/api-key-manager');
  * @param {string} task - The task to execute
  * @param {string} model - The model to use
  * @returns {string} - The result from OpenRouter
+ * 
+ * OpenRouter provides access to many powerful AI models completely free of charge.
+ * This makes the Hybrid AI CLI/GUI tool accessible to all students and developers,
+ * regardless of their budget or hardware setup.
  */
 async function executeOpenRouterTask(task, model) {
   // Get API key using the manager

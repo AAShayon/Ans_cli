@@ -41,19 +41,25 @@ function selectOptimalModel(task, purpose) {
         case 'flutter':
           return 'codellama:7b-instruct';
         case 'javascript':
-          return 'smollm2:1.7b';
+          // Prioritize free OpenRouter models for JavaScript tasks
+          return config.openrouterAI.availableModels.find(model => model.includes('mistral') || model.includes('openchat')) || 
+                 'smollm2:1.7b';
         case 'python':
           return 'codellama:7b-instruct';
         case 'java':
           return 'codellama:7b-instruct';
         case 'php':
-          return 'smollm2:1.7b';
+          // Prioritize free OpenRouter models for PHP tasks
+          return config.openrouterAI.availableModels.find(model => model.includes('openhermes') || model.includes('mistral')) || 
+                 'smollm2:1.7b';
         case 'image':
           // For image/UI tasks, use a model with vision capabilities
           return config.openrouterAI.availableModels.find(model => model.includes('vision')) || 
                  'microsoft/phi-3-mini-128k-instruct';
         default:
-          return 'smollm2:1.7b';
+          // Default to free OpenRouter models for general tasks
+          return config.openrouterAI.availableModels.find(model => model.includes('mistral') || model.includes('openchat')) || 
+                 'smollm2:1.7b';
       }
       
     case 'improvement':
@@ -62,24 +68,30 @@ function selectOptimalModel(task, purpose) {
         case 'flutter':
           return 'codellama:7b-instruct';
         case 'javascript':
-          return 'codegemma:2b';
+          // Use free models optimized for code analysis
+          return config.openrouterAI.availableModels.find(model => model.includes('codestral') || model.includes('gemma')) || 
+                 'codegemma:2b';
         case 'python':
           return 'codellama:7b-instruct';
         case 'java':
           return 'codellama:7b-instruct';
         case 'php':
-          return 'codegemma:2b';
+          return config.openrouterAI.availableModels.find(model => model.includes('codestral') || model.includes('gemma')) || 
+                 'codegemma:2b';
         case 'image':
           // For image/UI tasks, use a model with vision capabilities
           return config.openrouterAI.availableModels.find(model => model.includes('vision')) || 
                  'microsoft/phi-3-mini-128k-instruct';
         default:
-          return 'codegemma:2b';
+          // Default to free models for general improvements
+          return config.openrouterAI.availableModels.find(model => model.includes('codestral') || model.includes('gemma')) || 
+                 'codegemma:2b';
       }
       
     default:
-      // Default to a balanced model
-      return 'smollm2:1.7b';
+      // Default to a balanced free model
+      return config.openrouterAI.availableModels.find(model => model.includes('mistral') || model.includes('openchat')) || 
+             'smollm2:1.7b';
   }
 }
 

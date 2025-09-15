@@ -37,7 +37,13 @@ const config = {
       'microsoft/phi-3-mini-128k-instruct',
       'mistralai/codestral-mamba',
       'codellama/codellama-70b-instruct',
-      'meta-llama/llama-3-8b-instruct'
+      'meta-llama/llama-3-8b-instruct',
+      // Free-tier models that are suitable for students
+      'openchat/openchat-7b',
+      'neversleep/noromaid-20b',
+      'pygmalionai/mythalion-13b',
+      'undi95/toppy-m-7b',
+      'teknium/openhermes-2.5-mistral-7b'
     ]
   },
   

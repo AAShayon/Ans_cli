@@ -61,7 +61,7 @@ class APIKeySetup {
       choices.unshift({ title: 'Local models (requires Ollama, best for privacy)', value: 'local' });
       choices.push({ title: 'Both local and senior guidance', value: 'both-local' });
     } else {
-      choices.unshift({ title: 'OpenRouter API (free cloud service, no GPU required)', value: 'openrouter' });
+      choices.unshift({ title: 'OpenRouter API (completely free cloud service, no GPU required)', value: 'openrouter' });
       choices.push({ title: 'Both OpenRouter and senior guidance', value: 'both-openrouter' });
     }
     

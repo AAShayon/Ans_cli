@@ -25,7 +25,7 @@ async function makeDecision(task, complexity, options) {
       return {
         approach: 'openrouter',
         model: options.model || config.openrouterAI.defaultModel,
-        reason: 'Using OpenRouter for task processing'
+        reason: 'Using OpenRouter for task processing (free for students)'
       };
     } else {
       return {
@@ -52,7 +52,7 @@ async function makeDecision(task, complexity, options) {
         return {
           approach: 'openrouter',
           model: options.model || config.openrouterAI.defaultModel,
-          reason: 'Simple task - using OpenRouter for processing'
+          reason: 'Simple task - using free OpenRouter model for processing'
         };
       } else {
         return {
@@ -63,20 +63,20 @@ async function makeDecision(task, complexity, options) {
       }
       
     case 'guided':
-      // Use remote (professors) for guidance
+      // Use remote (professors) for guidance or OpenRouter for free processing
       if (hasRemote) {
         return {
           approach: 'hybrid',
           model: options.model || config.remote.defaultModel,
           localModel: hasOpenRouter ? config.openrouterAI.defaultModel : config.local.defaultModel,
-          reason: 'Moderate task - professor provides guidance, student executes'
+          reason: 'Moderate task - professor provides guidance, student executes with free models'
         };
       } else if (hasOpenRouter) {
         // If no remote keys but have OpenRouter, use OpenRouter for both
         return {
           approach: 'openrouter',
           model: options.model || config.openrouterAI.defaultModel,
-          reason: 'Moderate task - using OpenRouter for processing'
+          reason: 'Moderate task - using free OpenRouter model for processing'
         };
       } else {
         // Fall back to local
@@ -95,11 +95,15 @@ async function makeDecision(task, complexity, options) {
           reason: 'Complex task - requires direct professor consultation'
         };
       } else if (hasOpenRouter) {
-        // If no remote keys but have OpenRouter, use OpenRouter for complex tasks
+        // If no remote keys but have OpenRouter, use a powerful free model for complex tasks
+        const powerfulFreeModel = config.openrouterAI.availableModels.find(model => 
+          model.includes('codellama') || model.includes('llama-3') || model.includes('noromaid')) || 
+          config.openrouterAI.defaultModel;
+          
         return {
           approach: 'openrouter',
-          model: options.model || config.openrouterAI.defaultModel,
-          reason: 'Complex task - using OpenRouter for processing'
+          model: options.model || powerfulFreeModel,
+          reason: 'Complex task - using powerful free OpenRouter model for processing'
         };
       } else {
         // Fall back to local
@@ -116,7 +120,7 @@ async function makeDecision(task, complexity, options) {
         return {
           approach: 'openrouter',
           model: options.model || config.openrouterAI.defaultModel,
-          reason: 'Defaulting to OpenRouter for task processing'
+          reason: 'Defaulting to free OpenRouter model for task processing'
         };
       } else {
         return {

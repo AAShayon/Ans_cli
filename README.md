@@ -3,13 +3,19 @@
 A sophisticated AI tool that implements a complete professional software development workflow:
 - **Senior Developers (Gemini/Qwen)**: Create architecture, specifications, and conduct code reviews
 - **Implementation Team (Multiple AI Options)**: Implement solutions using specialized models for each task type
-- **Testing Framework (Sprite MCP)**: Automatically test code quality and functionality
+- **Testing Framework (Sprite MCP/TestSprite MCP)**: Automatically test code quality and functionality
 - **Continuous Improvement**: Iterative refinement based on professional feedback
 - **Motivational Guidance**: Inspirational messages about technology freedom throughout the process
 - **Interactive API Setup**: Guided setup for remote AI services
 - **Image Processing**: Analyze UI designs and documentation images
 
 This approach mimics a complete professional software development process with specialized roles, automated testing, inspirational guidance, and easy API configuration.
+
+Built with students and developers in mind - **completely free to use** with OpenRouter's free tier models!
+- No credit card required
+- No time limits
+- Access to powerful AI models including Llama, Mistral, and more
+- Generous rate limits for personal use
 
 Users can choose between:
 - **CLI Mode**: Command-line interface for power users
@@ -93,7 +99,7 @@ This command will guide you through hardware-specific setup:
 
 2. **Service Configuration**:
    - Option to use local models (Ollama) for GPU users
-   - Option to use OpenRouter cloud API for users without GPU
+   - Option to use OpenRouter cloud API for users without GPU (completely free!)
    - Option to use Senior Developer services (Gemini/Qwen) for complex tasks
 
 3. **Gemini API Setup**:
@@ -108,7 +114,7 @@ This command will guide you through hardware-specific setup:
 
 5. **OpenRouter API Setup**:
    - Option to open https://openrouter.ai/keys in your browser
-   - Guidance for creating a free API key
+   - Guidance for creating a **free** API key
    - Secure terminal-based key entry
 
 6. **Configuration Management**:
@@ -117,6 +123,8 @@ This command will guide you through hardware-specific setup:
    - Option to update existing keys
 
 The setup process will automatically open the appropriate websites in your browser and guide you through the key creation process. You can also choose to enter keys manually if you prefer.
+
+**Note**: OpenRouter provides completely free access to powerful AI models, making this tool accessible to all students and developers regardless of their budget or hardware setup.
 
 ## Prerequisites
 
@@ -147,6 +155,9 @@ The setup process will automatically open the appropriate websites in your brows
    - Install Sprite MCP (for testing - optional)
    - Get API keys for selected services
    - Configure the tool
+
+**Note**: For completely free usage, select "Cloud models (OpenRouter API, free service, no GPU required)" when prompted.
+No credit card is required to use OpenRouter's free tier models!
 
 ### Method 2: Manual Installation
 
@@ -249,11 +260,13 @@ hybrid-ai --local "Create a Python script to process CSV data"
 ```
 
 ### Cloud Processing (no GPU required)
-Free service via OpenRouter API:
+Completely free service via OpenRouter API:
 ```bash
 # Uses cloud models when local processing is not available
 hybrid-ai "Create a Flutter app for task management"
 ```
+
+OpenRouter provides access to powerful AI models completely free of charge, making this tool accessible to all students and developers regardless of their hardware setup.
 
 ### Senior Developer Guidance
 For complex tasks requiring expert input:
@@ -294,13 +307,16 @@ hybrid-ai -i "code-screenshot.png" "Convert this code screenshot to actual code"
   - Work locally or via cloud services based on configuration
   - Apply improvements suggested by senior developers
 
-### 🧪 Testing Framework (Sprite MCP)
+### 🧪 Testing Framework (Sprite MCP/TestSprite MCP)
 - **Role**: Quality assurance
 - **Responsibilities**:
-  - Run comprehensive automated tests
+  - Run comprehensive automated tests with Sprite MCP (if available)
+  - Fallback to TestSprite MCP for basic testing
   - Validate code quality and functionality
   - Identify bugs and performance issues
   - Provide detailed test reports
+
+TestSprite MCP is a built-in testing framework that provides basic testing capabilities for students and developers who don't have Sprite MCP installed.
 
 ### 🌟 Motivational Guidance System
 - **Role**: Inspiration and philosophical guidance
@@ -339,13 +355,18 @@ hybrid-ai -i "code-screenshot.png" "Convert this code screenshot to actual code"
 - TinyLlama (1.1B) - For simple tasks and quick responses
 
 ### Implementation Team (Cloud - OpenRouter):
+All models available through OpenRouter's free tier:
 - Mistral 7B - For general coding tasks
 - Gemma 7B - For code analysis tasks
 - Llama 2 13B - For complex reasoning tasks
 - Phi-3 Mini - For efficient processing
 - CodeLlama 70B - For complex coding tasks
 - Llama 3 8B - For balanced performance
+- OpenChat 7B - For conversational tasks
+- Noromaid 20B - For creative tasks
 - Vision Models - For image processing tasks
+
+These models are completely free to use with a generous rate limit for students and developers.
 
 ## Configuration
 
@@ -442,6 +463,7 @@ The tool automatically selects the best vision model available from your configu
 4. **"Sprite MCP not available"**:
    - Install Sprite MCP framework for comprehensive testing
    - Tool will work without it but with limited testing capabilities
+   - TestSprite MCP will be used as a fallback for basic testing
 
 5. **"No vision models available"**:
    - Ensure you have configured OpenRouter API key for image processing
